@@ -2,9 +2,61 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Franziskus Nakajima">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta id="theme-color" name="theme-color" content="#000">
+    <title>Oh, what's there?</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="css/zocial.css"> -->
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <title></title>
   </head>
   <body>
+    <div class="fullscreen">
 
+      <header class="text-center black">
+        <div class="col-1 open-menu" data-bind="click: toggleSearch">
+          V
+        </div>
+
+        <div class="col-11 logo" data-bind="text: title">
+        </div>
+      </header>
+
+      <div class="popout">
+
+        <div class="search">
+          <div class="search-icon">
+            O
+          </div>
+          <div class="input">
+            <input type="text" data-bind="textInput: searchString, event: {keyup: liveSearch}">
+          </div>
+          <!-- <div data-bind="text: searchString"></div> -->
+        </div>
+
+        <div class="locations" data-bind="foreach: searchResults">
+          <div class="location">
+            <span data-bind="text: displayName, click: $parent.bounceMarker" id="location-list-item"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="map">
+      </div>
+
+    </div>
+
+    <!-- Load js files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="js/knockout-3.4.1.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdTMyR9dXpej2PMKSs8RplX7cAfLvj_Ns&callback=initMap">
+    </script>
+    <script src="js/app.js"></script>
   </body>
 </html>
