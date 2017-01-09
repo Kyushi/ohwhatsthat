@@ -5,7 +5,7 @@ var map;
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 52.535, lng: 13.415},
-    zoom: 11
+    zoom: 12
   });
 
   // Start knockout
@@ -16,7 +16,7 @@ function initMap() {
   var markers = owt.locationList.map(function(location){
     return location.marker;
   });
-};
+}
 
 // Location
 var Location = function(data) {
@@ -43,7 +43,7 @@ var Location = function(data) {
   this.marker.addListener("click", function(){
     self.marker.setAnimation(google.maps.Animation.DROP);
   });
-};
+}
 
 // Categories
 var categories = [
@@ -99,36 +99,56 @@ function owtViewModel() {
   // TODO: do we still need this?
   this.toggleMarker = function(){
     this.marker.setVisible(!this.marker.getVisible());
-  };
+  }
 
+  // Hide all markers
+  this.toggleAllMarkers = function(){
+    console.log(self.searchResults().length==true);
+    if (!self.searchResults().length) {
+      self.locationList.forEach(function(location){
+        location.marker.setVisible(!location.marker.getVisible());
+      });
+    }
+  }
+
+  // Show markers of search results
+  this.showMarkers = function(results){
+    var loc = self.locationList;
+    for (var i=0; i<self.locationList.length; i++) {
+      var visible = results.includes(loc[i]);
+      self.locationList[i].marker.setVisible(visible);
+    }
+  }
 
   // Drop marker when clicking on search result
   this.bounceMarker = function(){
     this.marker.setAnimation(google.maps.Animation.DROP);
-  };
+  }
 
   // show or hide search bar
   this.toggleSearch = function(){
     $(".popout").toggle();
-  };
+  }
 
   // searchString for testing
-  this.searchString = ko.observable();
+  this.searchString = ko.observable('');
 
   // Empty array that should get updated when the liveSearch works
-  this.searchResults = ko.observableArray();
+  this.searchResults = ko.observableArray([]);
 
   // Search function
   this.liveSearch = function(){
-    var text = self.searchString();
+    var searchString = self.searchString().toLowerCase();
+    var locations = self.locationList;
     var results = [];
-    for (i=0; i<self.locationList.length; i++ ) {
-      if (text.length
-          && self.locationList[i].name().includes(text)) {
-        results.push(self.locationList[i]);
+    for (i=0; i<self.locationList.length; i++) {
+      if (searchString.length
+          && locations[i].displayName().toLowerCase().includes(searchString)) {
+        results.push(locations[i]);
       }
     }
     self.searchResults(results);
-  };
+    self.showMarkers(results);
+  }
 
-};
+}

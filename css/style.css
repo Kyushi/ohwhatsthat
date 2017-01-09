@@ -32,7 +32,6 @@ header {
   height: 95%; }
 
 .popout {
-  display: none;
   position: relative;
   width: auto;
   z-index: 100;

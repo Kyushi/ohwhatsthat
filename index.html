@@ -30,10 +30,10 @@
 
         <div class="search">
           <div class="search-icon">
-            O
+            <p>Search: </p>
           </div>
           <div class="input">
-            <input type="text" data-bind="textInput: searchString, event: {keyup: liveSearch}">
+            <input type="text" data-bind="textInput: searchString, event: {keyup: liveSearch, focus: toggleAllMarkers, blur: toggleAllMarkers}">
           </div>
           <!-- <div data-bind="text: searchString"></div> -->
         </div>
