@@ -40,7 +40,7 @@
 
         <div class="locations" data-bind="foreach: searchResults">
           <div class="location">
-            <span data-bind="text: displayName, click: $parent.bounceMarker" id="location-list-item"></span>
+            <span data-bind="text: displayName, click: $parent.loadCurrentLocation" id="location-list-item"></span>
           </div>
         </div>
 
@@ -49,7 +49,7 @@
       <div id="map">
       </div>
 
-      <div id="info" data-bind="text: infoText">
+      <div id="info" data-bind="text: infoText, visible: hasCurrentLocation">
       </div>
 
     </div>

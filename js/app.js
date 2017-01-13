@@ -67,13 +67,16 @@ function owtViewModel() {
     model.currentLocation(location);
   }
 
-  this.getCurrentLocation = ko.computed(function() {
+  this.getCurrentLocation = function() {
     return model.currentLocation();
+  };
+
+  this.hasCurrentLocation = ko.computed(function(){
+    return self.getCurrentLocation() ? true : false;
   });
 
   this.infoText = ko.computed(function(){
     var loc = self.getCurrentLocation();
-    console.log("Loc", loc);
     return loc ? loc.info : "Select a location on the map";
   });
 
@@ -101,8 +104,17 @@ function owtViewModel() {
   }
 
   // Drop marker when clicking on search result
-  this.bounceMarker = function(){
-    this.marker.setAnimation(google.maps.Animation.DROP);
+  this.bounceMarker = function(location){
+    location.marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){
+      location.marker.setAnimation(null);
+    }, 2100)
+  }
+
+  // React to click in search result list
+  this.loadCurrentLocation = function(){
+    self.setCurrentLocation(this);
+    self.bounceMarker(this);
   }
 
   // Everything relating to search below this
@@ -153,9 +165,7 @@ var Location = function(data) {
     map: map
   });
   this.marker.addListener("click", function(){
-    console.log("Clicked!");
     model.currentLocation(self);
-    console.log(model.currentLocation());
   });
 }
 
