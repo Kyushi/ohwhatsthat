@@ -1,82 +1,55 @@
-// Set map variable
+// Set global map variable
 var map;
 
-// Initialise map, centered on Berlin, with markers
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 52.535, lng: 13.415},
-    zoom: 12
-  });
-
-  // Start knockout
-  var owt = new owtViewModel();
-  ko.applyBindings(owt);
-
-  // get markers
-  var markers = owt.locationList.map(function(location){
-    return location.marker;
-  });
+var model = {
+  categories: [
+    "Project space",
+    "Art Gallery",
+    "Art Museum",
+    "Art Initiative"
+  ],
+  currentLocation: ko.observable(null),
+  data: [
+    {
+      name: "Projektraum Drifters",
+      street: "Kögelstr. 3",
+      postcode: "13403",
+      city: "Berlin",
+      lat: 52.567565,
+      lng: 13.330198,
+      website: "http://www.projektraum-drifters.de",
+      info: "Artist run project space in Berlin, home of the performance series 'Masses & Impersonation'",
+      category:0,
+    },
+    {
+      name: "Hamburger Bahnhof",
+      street: "Invalidenstraße 50-51",
+      postcode: "10557",
+      city: "Berlin",
+      lat: 52.5284401,
+      lng: 13.3721163,
+      website: "http://www.smb.museum/museen-und-einrichtungen/hamburger-bahnhof/home.html",
+      info: "Der Hamburger Bahnhof – Museum für Gegenwart – Berlin beherbergt reiche Sammlungen zeitgenössischer Kunst, die in einer Vielzahl von Ausstellungen gezeigt werden. Er ist das größte Haus der Nationalgalerie, deren umfassende Bestände außerdem in der Alten Nationalgalerie, der Neuen Nationalgalerie, der Friedrichswerderschen Kirche, dem Museum Berggruen und der Sammlung Scharf-Gerstenberg zu finden sind.",
+      category: 2
+    },
+    {
+      name: "Savvy Contemporary",
+      street: "Plantagenstraße 31",
+      postcode: "13347",
+      city: "Berlin",
+      lat: 52.5464748,
+      lng: 13.3642996,
+      website: "http://www.savvy-contemporary.com/",
+      info: "SAVVY Contemporary – The laboratory of form-ideas is a lab of " +
+            "conceptual, intellectual, artistic and cultural development and " +
+            "exchange; an atelier in which ideas are transformed to forms and " +
+            "forms to ideas, or gain cognition in their status quo. This is " +
+            "achieved with respect to conception, implementation and " +
+            "contestation of ideas with/in time and space.",
+      category: 3
+    }
+  ]
 }
-
-// Location
-var Location = function(data) {
-  var self = this;
-  this.name = ko.observable(data.name);
-  this.address = ko.observable(data.address);
-  this.postcode = ko.observable(data.postcode);
-  this.city = ko.observable(data.city);
-  this.lat = ko.observable(data.lat);
-  this.lng = ko.observable(data.lng);
-  this.website = ko.observable(data.website);
-  this.info = ko.observable(data.info);
-  this.category = ko.computed(function(){
-    return categories[data.category];
-  });
-  this.displayName = ko.computed(function(){
-    return self.name() + " (" + self.category() + ")"
-  });
-  this.marker = new google.maps.Marker({
-    position: {lat: self.lat(), lng: self.lng()},
-    title: self.name(),
-    map: map
-  });
-  this.marker.addListener("click", function(){
-    self.marker.setAnimation(google.maps.Animation.DROP);
-  });
-}
-
-// Categories
-var categories = [
-  "Project space",
-  "Art Gallery",
-  "Art Museum"
-];
-
-// Hardcoded model data for testing
-var locationData = [
-  {
-    name: "Projektraum Drifters",
-    address: "Kögelstr. 3",
-    postcode: "13403",
-    city: "Berlin",
-    lat: 52.567565,
-    lng: 13.330198,
-    website: "http://www.projektraum-drifters.de",
-    info: "Artist run project space in Berlin, home of the performance series 'Masses & Impersonation'",
-    category:0,
-  },
-  {
-    name: "Hamburger Bahnhof",
-    address: "Invalidenstraße 50-51",
-    postcode: "10557",
-    city: "Berlin",
-    lat: 52.5284401,
-    lng: 13.3721163,
-    website: "http://www.smb.museum/museen-und-einrichtungen/hamburger-bahnhof/home.html",
-    info: "Der Hamburger Bahnhof – Museum für Gegenwart – Berlin beherbergt reiche Sammlungen zeitgenössischer Kunst, die in einer Vielzahl von Ausstellungen gezeigt werden. Er ist das größte Haus der Nationalgalerie, deren umfassende Bestände außerdem in der Alten Nationalgalerie, der Neuen Nationalgalerie, der Friedrichswerderschen Kirche, dem Museum Berggruen und der Sammlung Scharf-Gerstenberg zu finden sind.",
-    category: 2
-  }
-];
 
 
 
@@ -85,25 +58,32 @@ function owtViewModel() {
   // The old `self=this` trick
   var self = this;
 
-  // Not sure about this part, maybe not necessary
-  this.title = ko.observable("Oh, what's there?");
+  // Load text from external source for easy localisation
+  this.title = ko.observable(textContent.header.title);
+  this.searchLabel = ko.observable(textContent.search.inputLabel);
+
+  // Set and get current location
+  this.setCurrentLocation = function(location) {
+    model.currentLocation(location);
+  }
+
+  this.getCurrentLocation = ko.computed(function() {
+    return model.currentLocation();
+  });
+
+  this.infoText = ko.computed(function(){
+    var loc = self.getCurrentLocation();
+    console.log("Loc", loc);
+    return loc ? loc.info : "Select a location on the map";
+  });
 
   // Get all locations into an array
-  this.locationList = locationData.map(function(location){
+  this.locationList = model.data.map(function(location){
     return new Location(location);
   });
 
-  // Put all locations into an observableArray TODO: still needed?
-  this.locations = ko.observableArray(this.locationList);
-
-  // TODO: do we still need this?
-  this.toggleMarker = function(){
-    this.marker.setVisible(!this.marker.getVisible());
-  }
-
   // Hide all markers
   this.toggleAllMarkers = function(){
-    console.log(self.searchResults().length==true);
     if (!self.searchResults().length) {
       self.locationList.forEach(function(location){
         location.marker.setVisible(!location.marker.getVisible());
@@ -125,6 +105,8 @@ function owtViewModel() {
     this.marker.setAnimation(google.maps.Animation.DROP);
   }
 
+  // Everything relating to search below this
+
   // show or hide search bar
   this.toggleSearch = function(){
     $(".popout").toggle();
@@ -143,12 +125,54 @@ function owtViewModel() {
     var results = [];
     for (i=0; i<self.locationList.length; i++) {
       if (searchString.length
-          && locations[i].displayName().toLowerCase().includes(searchString)) {
+          && locations[i].displayName.toLowerCase().includes(searchString)) {
         results.push(locations[i]);
       }
     }
     self.searchResults(results);
     self.showMarkers(results);
   }
+}
 
+// Location constructor
+var Location = function(data) {
+  var self = this;
+  this.name = data.name;
+  this.street = data.street;
+  this.postcode = data.postcode;
+  this.city = data.city;
+  this.lat = data.lat;
+  this.lng = data.lng;
+  this.website = data.website;
+  this.info = data.info;
+  this.category = model.categories[data.category];
+  this.displayName = self.name + " (" + self.category + ")";
+  this.marker = new google.maps.Marker({
+    position: {lat: self.lat, lng: self.lng},
+    title: self.name,
+    map: map
+  });
+  this.marker.addListener("click", function(){
+    console.log("Clicked!");
+    model.currentLocation(self);
+    console.log(model.currentLocation());
+  });
+}
+
+
+// Initialise map, centered on Berlin, with markers
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 52.535, lng: 13.415},
+    zoom: 12
+  });
+
+  // Start knockout
+  var owt = new owtViewModel();
+  ko.applyBindings(owt);
+
+  // get markers
+  var markers = owt.locationList.map(function(location){
+    return location.marker;
+  });
 }
