@@ -2,51 +2,55 @@
 var map;
 
 var model = {
-  categories: [
-    "Project space",
-    "Art Gallery",
-    "Art Museum",
-    "Art Initiative"
-  ],
   currentLocation: ko.observable(null),
   data: [
     {
-      name: "Projektraum Drifters",
-      street: "Kögelstr. 3",
-      postcode: "13403",
-      city: "Berlin",
-      lat: 52.567565,
-      lng: 13.330198,
-      website: "http://www.projektraum-drifters.de",
-      info: "Artist run project space in Berlin, home of the performance series 'Masses & Impersonation'",
-      category:0,
+        "location": [
+            "13.1423644",
+            "52.4349108"
+        ],
+        "name": "Alter Hof / Unterhavel",
+        "wpName": "Havel"
     },
     {
-      name: "Hamburger Bahnhof",
-      street: "Invalidenstraße 50-51",
-      postcode: "10557",
-      city: "Berlin",
-      lat: 52.5284401,
-      lng: 13.3721163,
-      website: "http://www.smb.museum/museen-und-einrichtungen/hamburger-bahnhof/home.html",
-      info: "Der Hamburger Bahnhof – Museum für Gegenwart – Berlin beherbergt reiche Sammlungen zeitgenössischer Kunst, die in einer Vielzahl von Ausstellungen gezeigt werden. Er ist das größte Haus der Nationalgalerie, deren umfassende Bestände außerdem in der Alten Nationalgalerie, der Neuen Nationalgalerie, der Friedrichswerderschen Kirche, dem Museum Berggruen und der Sammlung Scharf-Gerstenberg zu finden sind.",
-      category: 2
+        "location": [
+            "13.6237",
+            "52.4093"
+        ],
+        "name": "Bammelecke",
+        "wpName": "Bammelecke"
     },
     {
-      name: "Savvy Contemporary",
-      street: "Plantagenstraße 31",
-      postcode: "13347",
-      city: "Berlin",
-      lat: 52.5464748,
-      lng: 13.3642996,
-      website: "http://www.savvy-contemporary.com/",
-      info: "SAVVY Contemporary – The laboratory of form-ideas is a lab of " +
-            "conceptual, intellectual, artistic and cultural development and " +
-            "exchange; an atelier in which ideas are transformed to forms and " +
-            "forms to ideas, or gain cognition in their status quo. This is " +
-            "achieved with respect to conception, implementation and " +
-            "contestation of ideas with/in time and space.",
-      category: 3
+        "location": [
+            "13.180702",
+            "52.4648988"
+        ],
+        "name": "Breitehorn / Unterhavel",
+        "wpName": "Havel"
+    },
+    {
+        "location": [
+            "13.2136153",
+            "52.5866148"
+        ],
+        "name": "B\u00fcrgerablage / Oberhavel",
+        "wpName": "Havel"
+    },
+    {
+        "location": [
+            "13.7313346",
+            "52.4256948"
+        ],
+        "name": "D\u00e4meritzsee",
+        "wpName": "D\u00e4meritzsee"
+    },
+    {
+        "location": [
+            "13.2856306",
+            "52.5700818"
+        ],
+        "name": "Flughafensee",
+        "wpName": "Flughafensee"
     }
   ]
 }
@@ -150,17 +154,10 @@ function owtViewModel() {
 var Location = function(data) {
   var self = this;
   this.name = data.name;
-  this.street = data.street;
-  this.postcode = data.postcode;
-  this.city = data.city;
-  this.lat = data.lat;
-  this.lng = data.lng;
-  this.website = data.website;
-  this.info = data.info;
-  this.category = model.categories[data.category];
-  this.displayName = self.name + " (" + self.category + ")";
+  this.position = data.location.lat;
+  this.wpName = data.wpName;
   this.marker = new google.maps.Marker({
-    position: {lat: self.lat, lng: self.lng},
+    position: self.position,
     title: self.name,
     map: map
   });
