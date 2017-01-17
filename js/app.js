@@ -1,6 +1,7 @@
 // Set global map variable
 var map;
 
+// model data for testing, actual data will be retrieved from JSON file
 var model = {
   currentLocation: ko.observable(null),
   data: [
@@ -62,6 +63,11 @@ function owtViewModel() {
   // The old `self=this` trick
   var self = this;
 
+  // Get all locations into an array
+  this.locationList = model.data.map(function(location){
+    return new Location(location);
+  });
+
   // Load text from external source for easy localisation
   this.title = ko.observable(textContent.header.title);
   this.searchLabel = ko.observable(textContent.search.inputLabel);
@@ -75,19 +81,17 @@ function owtViewModel() {
     return model.currentLocation();
   };
 
+  // check if currentLocation is set and return boolean
   this.hasCurrentLocation = ko.computed(function(){
     return self.getCurrentLocation() ? true : false;
   });
 
+  // TODO: compute info text for displaying in info window. Use API
   this.infoText = ko.computed(function(){
     var loc = self.getCurrentLocation();
     return loc ? loc.info : "Select a location on the map";
   });
 
-  // Get all locations into an array
-  this.locationList = model.data.map(function(location){
-    return new Location(location);
-  });
 
   // Hide all markers
   this.toggleAllMarkers = function(){
@@ -107,7 +111,7 @@ function owtViewModel() {
     }
   }
 
-  // Drop marker when clicking on search result
+  // Bounce marker 3 times when clicking on search result
   this.bounceMarker = function(location){
     location.marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function(){
@@ -141,7 +145,7 @@ function owtViewModel() {
     var results = [];
     for (i=0; i<self.locationList.length; i++) {
       if (searchString.length
-          && locations[i].displayName.toLowerCase().includes(searchString)) {
+          && locations[i].name.toLowerCase().includes(searchString)) {
         results.push(locations[i]);
       }
     }
@@ -154,13 +158,20 @@ function owtViewModel() {
 var Location = function(data) {
   var self = this;
   this.name = data.name;
-  this.position = data.location.lat;
+  this.coords = new google.maps.LatLng(data.location[0], data.location[1]);
+  console.log(this.coords.toJSON());
   this.wpName = data.wpName;
   this.marker = new google.maps.Marker({
-    position: self.position,
+    position: self.coords,
     title: self.name,
     map: map
   });
+  console.log(this.marker.title,
+              this.marker.getPosition(),
+              this.marker.position.lat(),
+              this.marker.position.lng(),
+              typeof(this.marker.position.lat()), 
+              typeof(this.marker.position.lng()));
   this.marker.addListener("click", function(){
     model.currentLocation(self);
   });
