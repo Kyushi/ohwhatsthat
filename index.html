@@ -17,39 +17,42 @@
   <body>
     <div class="fullscreen">
 
-      <header class="text-center black">
-        <div class="col-1 open-menu" data-bind="click: toggleSearch">
-          V
-        </div>
-
-        <div class="col-11 logo" data-bind="text: title">
-        </div>
-      </header>
-
-      <div class="popout">
-
-        <div class="search">
-          <div class="search-icon">
-            <p data-bind="text: searchLabel"></p>
+      <div class="page-top">
+        <header class="text-center black">
+          <div class="col-3 open-menu" data-bind="click: toggleSearch">
+            Click to toggle search
           </div>
-          <div class="input">
-            <input type="text" data-bind="textInput: searchString, event: {keyup: liveSearch}">
-          </div>
-          <!-- <div data-bind="text: searchString"></div> -->
-        </div>
 
-        <div class="locations" data-bind="foreach: searchResults">
-          <div class="location">
-            <span data-bind="text: name, click: $parent.loadCurrentLocation" id="location-list-item"></span>
+          <div class="col-9 logo" data-bind="text: title">
           </div>
+        </header>
+
+        <div class="popout">
+
+          <div class="search">
+            <div class="search-icon">
+              <p class="search-text" data-bind="text: searchLabel"></p>
+            </div>
+            <div class="input">
+              <input type="text" data-bind="textInput: searchString, event: {keyup: liveSearch}">
+            </div>
+          </div>
+
+          <div class="locations" data-bind="foreach: searchResults">
+            <div class="location">
+              <span data-bind="text: name, click: $parent.loadCurrentLocation" id="location-list-item"></span>
+            </div>
+          </div>
+
         </div>
 
       </div>
-
+      <div class="buffer">
+      </div>
       <div id="map">
       </div>
 
-      <div id="info" data-bind="html: infoText">
+      <div id="info" class="black" data-bind="html: infoText, visible: hasCurrentLocation">
       </div>
 
     </div>

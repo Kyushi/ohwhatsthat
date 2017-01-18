@@ -1,7 +1,7 @@
 // Set global map variable
 var map;
 
-// model data for testing, actual data will be retrieved from JSON file
+// Model
 var model = {
   currentLocation: ko.observable(null),
   data: lakes
@@ -61,15 +61,6 @@ function owtViewModel() {
     return self.infoTitle() + self.waterInfo() + self.wikiText();
   });
 
-  // // Hide all markers
-  // this.toggleAllMarkers = function(){
-  //   if (!self.searchResults().length) {
-  //     self.locationList.forEach(function(location){
-  //       location.marker.setVisible(!location.marker.getVisible());
-  //     });
-  //   }
-  // }
-
   // Show markers of search results
   this.showMarkers = function(results){
     var loc = self.locationList;
@@ -93,6 +84,7 @@ function owtViewModel() {
     self.bounceMarker(this);
     self.getWikiInfo(this);
     self.getWaterInfo(this);
+    self.toggleSearch();
   }
 
   // Everything relating to search below this
@@ -236,9 +228,6 @@ var Location = function(data) {
     title: self.name,
     map: map
   });
-  // this.marker.addListener("click", function(){
-  //   model.currentLocation(self);
-  // });
 }
 
 

@@ -1,10 +1,17 @@
 // My styles
 
 // Color variables
-$black: #000;
-$white: #fff;
+$black: #000001;
+$white: #fffffe;
 $grey: #777;
 $red: #a70000;
+
+// reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 html,
 body {
@@ -24,35 +31,34 @@ body {
   height: 100%;
 }
 
-header {
-  height: 10%;
+.page-top {
+  position: absolute;
+  z-index: 110;
+  width: 100%;
+}
+
+header,
+.buffer {
+  min-height: 50px;
+  height: 5%;
 }
 
 .logo {
   font-size: 24px;
+  padding: 0.33em;
 }
 
 .open-menu {
-  // height: 100%;
-  font-size: 24px;
+  display: table-cell;
+  vertical-align: middle;
+  height: 100%;
+  font-size: 14px;
   font-weight: 100;
 }
 
 .black {
   background: $black;
   color: $white;
-}
-
-#map {
-  width: 100%;
-  height: 70%;
-}
-
-#info {
-  height: 25%;
-  background: $black;
-  color: $white;
-  z-index: 100;
 }
 
 // Popout styling
@@ -91,4 +97,17 @@ input {
 .location {
   border-top: 1px solid $grey;
   width: auto;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+#info {
+  position: absolute;
+  max-height: 75%;
+  overflow: scroll;
+  bottom: 50px;
+  z-index: 100;
 }
