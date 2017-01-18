@@ -61,14 +61,14 @@ function owtViewModel() {
     return self.infoTitle() + self.waterInfo() + self.wikiText();
   });
 
-  // Hide all markers
-  this.toggleAllMarkers = function(){
-    if (!self.searchResults().length) {
-      self.locationList.forEach(function(location){
-        location.marker.setVisible(!location.marker.getVisible());
-      });
-    }
-  }
+  // // Hide all markers
+  // this.toggleAllMarkers = function(){
+  //   if (!self.searchResults().length) {
+  //     self.locationList.forEach(function(location){
+  //       location.marker.setVisible(!location.marker.getVisible());
+  //     });
+  //   }
+  // }
 
   // Show markers of search results
   this.showMarkers = function(results){
@@ -114,13 +114,20 @@ function owtViewModel() {
     var locations = self.locationList;
     var results = [];
     for (i=0; i<self.locationList.length; i++) {
-      if (searchString.length
+      if ((searchString.length > 0)
           && locations[i].name.toLowerCase().includes(searchString)) {
         results.push(locations[i]);
+        locations[i].marker.setVisible(true);
+      }
+      else if (searchString.length > 0){
+        locations[i].marker.setVisible(false);
+      }
+      else {
+        locations[i].marker.setVisible(true);
       }
     }
     self.searchResults(results);
-    self.showMarkers(results);
+    // self.showMarkers(results);
   }
 
   // Retrieve Wikipedia info
@@ -175,7 +182,7 @@ function owtViewModel() {
     // });
     $.ajax({
       url: url,
-      dataType: 'json',
+      dataType: 'jsonp',
       // contentType: 'application/json',
       cache: true,
     })
