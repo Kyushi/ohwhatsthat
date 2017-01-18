@@ -17,42 +17,49 @@
   <body>
     <div class="fullscreen">
 
-      <div class="page-top">
-        <header class="text-center black">
-          <div class="col-3 open-menu" data-bind="click: toggleSearch">
-            Click to toggle search
-          </div>
 
-          <div class="col-9 logo" data-bind="text: title">
-          </div>
-        </header>
+      <header class="text-center black">
+        <p class="col-12 logo" data-bind="text: title">
+        </p>
+      </header>
 
-        <div class="popout">
-
-          <div class="search">
-            <div class="search-icon">
-              <p class="search-text" data-bind="text: searchLabel"></p>
-            </div>
-            <div class="input">
-              <input type="text" data-bind="textInput: searchString, event: {keyup: liveSearch}">
-            </div>
-          </div>
-
-          <div class="locations" data-bind="foreach: searchResults">
-            <div class="location">
-              <span data-bind="text: name, click: $parent.loadCurrentLocation" id="location-list-item"></span>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-      <div class="buffer">
-      </div>
       <div id="map">
       </div>
 
-      <div id="info" class="black" data-bind="html: infoText, visible: hasCurrentLocation">
+      <div class="page-bottom black">
+
+        <div class="search">
+          <div class="search-icon">
+            <span class="entypo-search"></span>
+          </div>
+          <div class="input">
+            <input type="text" data-bind="textInput: searchString, event: {keyup: liveSearch}">
+          </div>
+        </div>
+
+        <div class="locations" data-bind="foreach: searchResults">
+          <div class="location">
+            <span data-bind="text: name, click: $parent.loadCurrentLocation" id="location-list-item"></span>
+          </div>
+        </div>
+
+        <footer class="black small text-center" data-bind="text: footerText">
+        </footer>
+
+      </div>
+
+      <div id="info" class="transparent" data-bind="visible: hasCurrentLocation">
+        <div class="info-window black">
+          <div class="info-header black">
+            <h2 id="info-title" data-bind="text: infoTitle, click: bounceMarker"></h2>
+            <div class="close black fine" data-bind="text: close, click: clearCurrentLocation">
+            </div>
+          </div>
+          <div class="info-body black">
+            <p data-bind="html: infoText" class="fine">
+            </p>
+          </div>
+        </div>
       </div>
 
     </div>

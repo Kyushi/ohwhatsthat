@@ -27,10 +27,6 @@ function owtViewModel() {
     });
   });
 
-  // Load text from external source for easy localisation
-  this.title = ko.observable(textContent.header.title);
-  this.searchLabel = ko.observable(textContent.search.inputLabel);
-
   // Set and get current location
   this.setCurrentLocation = function(location) {
     model.currentLocation(location);
@@ -45,20 +41,26 @@ function owtViewModel() {
     return self.getCurrentLocation() ? true : false;
   });
 
-  // Observable for info window title
-  this.infoTitle = ko.computed(function(){
-    return self.hasCurrentLocation() ? self.getCurrentLocation().name : "Select a location"
-  });
+  this.clearCurrentLocation = function(){
+    model.currentLocation(null);
+  }
 
+  // Load text from external source for easy localisation
+  this.close = ko.observable(textContent.helpers.close);
+  this.title = ko.observable(textContent.header.title);
+  this.searchLabel = ko.observable(textContent.search.inputLabel);
+  this.footerText = ko.observable(textContent.footer.footerText);
   // Observable for wikipedia infoText
   this.wikiText = ko.observable('');
-
   // Observable for water quality info
   this.waterInfo = ko.observable('');
-
-  // Compile html for infoText window
+  // Compile html for infoText window TODO: Add more info to infotext
   this.infoText = ko.computed(function(){
-    return self.infoTitle() + self.waterInfo() + self.wikiText();
+    return self.wikiText();
+  });
+  // Observable for info window title
+  this.infoTitle = ko.computed(function(){
+    return self.hasCurrentLocation() ? self.getCurrentLocation().name : null;
   });
 
   // Show markers of search results
@@ -71,7 +73,8 @@ function owtViewModel() {
   }
 
   // Bounce marker 3 times when clicking on search result
-  this.bounceMarker = function(location){
+  this.bounceMarker = function(){
+    var location = self.getCurrentLocation();
     location.marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function(){
       location.marker.setAnimation(null);
@@ -98,7 +101,7 @@ function owtViewModel() {
   this.searchString = ko.observable('');
 
   // Empty array that should get updated when the liveSearch works
-  this.searchResults = ko.observableArray([]);
+  this.searchResults = ko.observableArray(this.locationList);
 
   // Search function
   this.liveSearch = function(){
@@ -214,7 +217,6 @@ function owtViewModel() {
     // }
     return string
   }
-
 }
 
 // Location constructor

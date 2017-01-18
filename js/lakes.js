@@ -61,7 +61,7 @@ lakes = [
             "52.4418048"
         ],
         "name": "Flussbad Gartenstra\u00dfe",
-        "wpName": "Flussbad_Gartenstra\u00dfe"
+        "wpName": "Dahme_(Fluss)"
     },
     {
         "location": [
@@ -285,7 +285,7 @@ lakes = [
             "52.4929428"
         ],
         "name": "Teufelssee",
-        "wpName": "Teufelssee"
+        "wpName": "Teufelssee_(Grunewald)"
     },
     {
         "location": [

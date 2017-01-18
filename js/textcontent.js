@@ -4,5 +4,11 @@ var textContent = {
   },
   search: {
     inputLabel: "Search: "
+  },
+  footer: {
+    footerText: "© Franziskus Nakajima 2017"
+  },
+  helpers: {
+    close: "close"
   }
 }
