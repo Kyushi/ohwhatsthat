@@ -46,22 +46,21 @@
         <footer class="black small text-center" data-bind="text: footerText">
         </footer>
 
-      </div>
-
-      <div id="info" class="transparent" data-bind="visible: hasCurrentLocation">
-        <div class="info-window black">
-          <div class="info-header black">
-            <h2 id="info-title" data-bind="text: infoTitle, click: bounceMarker"></h2>
-            <div class="close black fine" data-bind="text: close, click: clearCurrentLocation">
+        <div id="info-window" class="black" data-bind="visible: hasCurrentLocation">
+          <!-- <div class="info-window black"> -->
+            <div class="info-header black">
+              <h2 id="info-title" data-bind="text: infoTitle, click: bounceMarker"></h2>
+              <div class="close black fine" data-bind="text: close, click: clearCurrentLocation">
+              </div>
             </div>
-          </div>
-          <div class="info-body black">
-            <p data-bind="html: infoText" class="fine">
-            </p>
-          </div>
+            <div id="info-body" class="black">
+              <p data-bind="html: infoText" class="fine">
+              </p>
+            </div>
+          <!-- </div> -->
         </div>
-      </div>
 
+      </div>
     </div>
 
     <!-- Load js files -->

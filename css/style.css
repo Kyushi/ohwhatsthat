@@ -96,17 +96,10 @@ input {
   width: auto;
   padding: 2px; }
 
-#info {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  z-index: 100; }
-
-.info-window {
+#info-window {
   position: absolute;
   opacity: 1;
-  height: 50%;
+  height: 100%;
   width: 100%;
   bottom: 0; }
 
@@ -123,7 +116,7 @@ input {
   float: right;
   padding: 5px 3px; }
 
-.info-body {
+#info-body {
   clear: both;
   letter-spacing: 0.3em;
   padding: 0.333em;

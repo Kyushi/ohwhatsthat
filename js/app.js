@@ -20,10 +20,7 @@ function owtViewModel() {
   // Add click binding to location markers
   this.locationList.forEach(function(location){
     location.marker.addListener('click', function(){
-      self.setCurrentLocation(location);
-      self.bounceMarker(location);
-      self.getWikiInfo(location);
-      self.getWaterInfo(location);
+      self.loadCurrentLocation();
     });
   });
 
@@ -43,6 +40,7 @@ function owtViewModel() {
 
   this.clearCurrentLocation = function(){
     model.currentLocation(null);
+    self.resetMapCenter();
   }
 
   // Load text from external source for easy localisation
@@ -81,13 +79,25 @@ function owtViewModel() {
     }, 2100)
   }
 
+  // Center map on current marker's position
+  this.centerMap = function(){
+    var position = self.getCurrentLocation().marker.position;
+    map.setCenter(position);
+    map.setZoom(13);
+  }
+
+  this.resetMapCenter = function(){
+    map.setCenter({lat: 52.515, lng: 13.415});
+    map.setZoom(10);
+  }
+
   // React to click in search result list
   this.loadCurrentLocation = function(){
     self.setCurrentLocation(this);
     self.bounceMarker(this);
     self.getWikiInfo(this);
-    self.getWaterInfo(this);
-    self.toggleSearch();
+    self.centerMap();
+    // self.getWaterInfo(this);
   }
 
   // Everything relating to search below this
@@ -119,6 +129,7 @@ function owtViewModel() {
       }
       else {
         locations[i].marker.setVisible(true);
+        results.push(locations[i]);
       }
     }
     self.searchResults(results);
@@ -192,11 +203,6 @@ function owtViewModel() {
     });
   }
 
-  // // Callback function for jsonp call to Berlin API
-  // this.jsonCallback = function(json){
-  //   console.log("Callback called");
-  //   console.log(json);
-  // }
 
   this.makeSafeURI = function(string){
     string = string.replace(/ /g, "+");
@@ -204,17 +210,6 @@ function owtViewModel() {
     string = string.replace(/\(/, "%28");
     string = string.replace(/\)/, "%29");
     string = string.replace(/\//, "%2F");
-    // var replaceChars = {
-    //   " ": "%20",
-    //   ",": "%2C",
-    //   "\(": "%28",
-    //   "\)": "%29",
-    //   "\/": "%2F"
-    // }
-    // for (char in replaceChars){
-    //   var re = new RegExp(char, 'g');
-    //   string = string.replace(re, replaceChars[char]);
-    // }
     return string
   }
 }
@@ -236,7 +231,7 @@ var Location = function(data) {
 // Initialise map, centered on Berlin, with markers
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 52.535, lng: 13.415},
+    center: {lat: 52.515, lng: 13.415},
     zoom: 10
   });
 
