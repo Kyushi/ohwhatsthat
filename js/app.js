@@ -4,59 +4,8 @@ var map;
 // model data for testing, actual data will be retrieved from JSON file
 var model = {
   currentLocation: ko.observable(null),
-  data: [
-    {
-        "location": [
-            "13.1423644",
-            "52.4349108"
-        ],
-        "name": "Alter Hof / Unterhavel",
-        "wpName": "Havel"
-    },
-    {
-        "location": [
-            "13.6237",
-            "52.4093"
-        ],
-        "name": "Bammelecke",
-        "wpName": "Bammelecke"
-    },
-    {
-        "location": [
-            "13.180702",
-            "52.4648988"
-        ],
-        "name": "Breitehorn / Unterhavel",
-        "wpName": "Havel"
-    },
-    {
-        "location": [
-            "13.2136153",
-            "52.5866148"
-        ],
-        "name": "B\u00fcrgerablage / Oberhavel",
-        "wpName": "Havel"
-    },
-    {
-        "location": [
-            "13.7313346",
-            "52.4256948"
-        ],
-        "name": "D\u00e4meritzsee",
-        "wpName": "D\u00e4meritzsee"
-    },
-    {
-        "location": [
-            "13.2856306",
-            "52.5700818"
-        ],
-        "name": "Flughafensee",
-        "wpName": "Flughafensee"
-    }
-  ]
+  data: lakes
 }
-
-
 
 // Viewmodel
 function owtViewModel() {
@@ -66,6 +15,16 @@ function owtViewModel() {
   // Get all locations into an array
   this.locationList = model.data.map(function(location){
     return new Location(location);
+  });
+
+  // Add click binding to location markers
+  this.locationList.forEach(function(location){
+    location.marker.addListener('click', function(){
+      self.setCurrentLocation(location);
+      self.bounceMarker(location);
+      self.getWikiInfo(location);
+      self.getWaterInfo(location);
+    });
   });
 
   // Load text from external source for easy localisation
@@ -86,12 +45,21 @@ function owtViewModel() {
     return self.getCurrentLocation() ? true : false;
   });
 
-  // TODO: compute info text for displaying in info window. Use API
-  this.infoText = ko.computed(function(){
-    var loc = self.getCurrentLocation();
-    return loc ? loc.info : "Select a location on the map";
+  // Observable for info window title
+  this.infoTitle = ko.computed(function(){
+    return self.hasCurrentLocation() ? self.getCurrentLocation().name : "Select a location"
   });
 
+  // Observable for wikipedia infoText
+  this.wikiText = ko.observable('');
+
+  // Observable for water quality info
+  this.waterInfo = ko.observable('');
+
+  // Compile html for infoText window
+  this.infoText = ko.computed(function(){
+    return self.infoTitle() + self.waterInfo() + self.wikiText();
+  });
 
   // Hide all markers
   this.toggleAllMarkers = function(){
@@ -123,6 +91,8 @@ function owtViewModel() {
   this.loadCurrentLocation = function(){
     self.setCurrentLocation(this);
     self.bounceMarker(this);
+    self.getWikiInfo(this);
+    self.getWaterInfo(this);
   }
 
   // Everything relating to search below this
@@ -152,29 +122,116 @@ function owtViewModel() {
     self.searchResults(results);
     self.showMarkers(results);
   }
+
+  // Retrieve Wikipedia info
+  this.getWikiInfo = function(location){
+    // set TimeOut
+    var wikiRequestTimeout = setTimeout(function(){
+      self.wikiText = "Looks like the data was delivered by a sloth. The request timed out."
+    }, 8000);
+    var pageTitle = location.wpName;
+    var wpurl = "https://de.wikipedia.org/w/api.php";
+    wpurl = wpurl + '?' + $.param({
+      'format': "json",
+      'action': "query",
+      'titles': pageTitle,
+      'prop': "extracts",
+      'exintro': 1
+    });
+    $.ajax({
+      url: wpurl,
+      dataType: 'jsonp'
+    })
+    .done(function(data){
+      result = data.query.pages;
+      var extract;
+      $.each(result, function(i){
+        // title = result[i]["title"];
+        extract = result[i]["extract"];
+      });
+      self.wikiText(extract);
+      clearTimeout(wikiRequestTimeout);
+    })
+    .fail(function(){
+      self.wikiText("Something went wrong when trying to retrieve info from Wikipedia.")
+    })
+  }
+
+  // Retrieve information about water quality and temperature from Berlin API
+  this.getWaterInfo = function(location){
+    var query = self.makeSafeURI(location.name);
+    console.log(query);
+    var url = 'http://www.berlin.de/lageso/gesundheit/gesundheitsschutz/badegewaesser/liste-der-badestellen/index.php/index.json';
+    url = url + '?badname=' + query;
+    console.log(url);
+    // $.getJSON(url, function(data){
+    //   console.log(data);
+    //   var date = data['index']['dat'];
+    //   var temp = data['index']['temp'];
+    //   var visibility = data['index']['sicht'];
+    // })
+    // .fail(function(){
+    //   self.waterInfo("Could not load water information");
+    // });
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      // contentType: 'application/json',
+      cache: true,
+    })
+    .done(function(data){
+      console.log(data);
+      var date = data['index']['dat'];
+      var temp = data['index']['temp'];
+      var visibility = data['index']['sicht'];
+    })
+    .fail(function(){
+      self.waterInfo("Could not load water information")
+    });
+  }
+
+  // // Callback function for jsonp call to Berlin API
+  // this.jsonCallback = function(json){
+  //   console.log("Callback called");
+  //   console.log(json);
+  // }
+
+  this.makeSafeURI = function(string){
+    string = string.replace(/ /g, "+");
+    string = string.replace(/,/, "%2C");
+    string = string.replace(/\(/, "%28");
+    string = string.replace(/\)/, "%29");
+    string = string.replace(/\//, "%2F");
+    // var replaceChars = {
+    //   " ": "%20",
+    //   ",": "%2C",
+    //   "\(": "%28",
+    //   "\)": "%29",
+    //   "\/": "%2F"
+    // }
+    // for (char in replaceChars){
+    //   var re = new RegExp(char, 'g');
+    //   string = string.replace(re, replaceChars[char]);
+    // }
+    return string
+  }
+
 }
 
 // Location constructor
 var Location = function(data) {
   var self = this;
   this.name = data.name;
-  this.coords = new google.maps.LatLng(data.location[0], data.location[1]);
-  console.log(this.coords.toJSON());
+  this.coords = new google.maps.LatLng(data.location[1], data.location[0]);
   this.wpName = data.wpName;
   this.marker = new google.maps.Marker({
     position: self.coords,
     title: self.name,
     map: map
   });
-  console.log(this.marker.title,
-              this.marker.getPosition(),
-              this.marker.position.lat(),
-              this.marker.position.lng(),
-              typeof(this.marker.position.lat()), 
-              typeof(this.marker.position.lng()));
-  this.marker.addListener("click", function(){
-    model.currentLocation(self);
-  });
+  // this.marker.addListener("click", function(){
+  //   model.currentLocation(self);
+  // });
 }
 
 
@@ -182,7 +239,7 @@ var Location = function(data) {
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 52.535, lng: 13.415},
-    zoom: 12
+    zoom: 10
   });
 
   // Start knockout

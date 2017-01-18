@@ -1,0 +1,94 @@
+// My styles
+
+// Color variables
+$black: #000;
+$white: #fff;
+$grey: #777;
+$red: #a70000;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  background: $grey url('../img/background.jpg') no-repeat center;
+  padding: 0;
+}
+
+.fullscreen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+header {
+  height: 10%;
+}
+
+.logo {
+  font-size: 24px;
+}
+
+.open-menu {
+  // height: 100%;
+  font-size: 24px;
+  font-weight: 100;
+}
+
+.black {
+  background: $black;
+  color: $white;
+}
+
+#map {
+  width: 100%;
+  height: 70%;
+}
+
+#info {
+  height: 25%;
+  background: $black;
+  color: $white;
+  z-index: 100;
+}
+
+// Popout styling
+
+.popout {
+  // display: none;
+  position: relative;
+  width: auto;
+  z-index: 100;
+  background: $black;
+  color: $white;
+  font-size: 14px;
+}
+
+.search-icon {
+  height: 48px;
+  width: 48px;
+  border-radius: 12px;
+  float: left;
+}
+
+.input {
+  float: left;
+  width: 80%;
+}
+
+input {
+  width: 100%;
+  color: $black;
+}
+
+.locations {
+  clear: both;
+}
+
+.location {
+  border-top: 1px solid $grey;
+  width: auto;
+}
