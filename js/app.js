@@ -20,7 +20,9 @@ function owtViewModel() {
   // Add click binding to location markers
   this.locationList.forEach(function(location){
     location.marker.addListener('click', function(){
-      self.loadCurrentLocation();
+      self.setCurrentLocation(location);
+      self.bounceMarker(location);
+      self.getWikiInfo(location);
     });
   });
 
