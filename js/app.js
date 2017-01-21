@@ -23,6 +23,7 @@ function owtViewModel() {
       self.setCurrentLocation(location);
       self.bounceMarker(location);
       self.getWikiInfo(location);
+      self.getTumblrImage(location);
     });
   });
 
@@ -42,6 +43,9 @@ function owtViewModel() {
 
   this.clearCurrentLocation = function(){
     model.currentLocation(null);
+    self.clearWikiInfo();
+    self.clearWaterInfo();
+    self.clearTumblrImg();
     self.resetMapCenter();
   }
 
@@ -50,18 +54,26 @@ function owtViewModel() {
   this.title = ko.observable(textContent.header.title);
   this.searchLabel = ko.observable(textContent.search.inputLabel);
   this.footerText = ko.observable(textContent.footer.footerText);
-  // Observable for wikipedia infoText
+  this.impressumLink = ko.observable(textContent.footer.impressum);
+  this.credits = ko.observable(textContent.footer.credits);
+  // Observable for wikipedia infoText and link to article
   this.wikiText = ko.observable('');
+  this.wikiLink = ko.observable('');
   // Observable for water quality info
-  this.waterInfo = ko.observable('');
-  // Compile html for infoText window TODO: Add more info to infotext
+  this.waterInfo = ko.observable(textContent.helpers.loading);
+  // Compile html for infoText window
   this.infoText = ko.computed(function(){
-    return self.wikiText();
+    return "<br>" + self.waterInfo() + "<br>" + self.wikiText();
   });
   // Observable for info window title
   this.infoTitle = ko.computed(function(){
     return self.hasCurrentLocation() ? self.getCurrentLocation().name : null;
   });
+  // Observables for tumblr info
+  this.tumblrImg = ko.observable('');
+  this.postLink = ko.observable('');
+  this.blogName = ko.observable('');
+  this.tumblrTag = ko.observable('');
 
   // Show markers of search results
   this.showMarkers = function(results){
@@ -99,7 +111,13 @@ function owtViewModel() {
     self.bounceMarker(this);
     self.getWikiInfo(this);
     self.centerMap();
-    // self.getWaterInfo(this);
+    self.getTumblrImage(this);
+    self.getWaterInfo(this);
+  }
+
+  // Function to enlarge footer to show page info-title
+  this.showPageInfo = function(){
+    //
   }
 
   // Everything relating to search below this
@@ -158,13 +176,15 @@ function owtViewModel() {
       dataType: 'jsonp'
     })
     .done(function(data){
-      result = data.query.pages;
+      var article_url = "http://de.wikipedia.org/wiki/" + pageTitle;
+      var result = data.query.pages;
       var extract;
       $.each(result, function(i){
         // title = result[i]["title"];
         extract = result[i]["extract"];
       });
       self.wikiText(extract);
+      self.wikiLink(article_url);
       clearTimeout(wikiRequestTimeout);
     })
     .fail(function(){
@@ -172,37 +192,92 @@ function owtViewModel() {
     })
   }
 
-  // Retrieve information about water quality and temperature from Berlin API
-  this.getWaterInfo = function(location){
-    var query = self.makeSafeURI(location.name);
-    console.log(query);
-    var url = 'http://www.berlin.de/lageso/gesundheit/gesundheitsschutz/badegewaesser/liste-der-badestellen/index.php/index.json';
-    url = url + '?badname=' + query;
+  // Clear wiki info when
+  this.clearWikiInfo = function(){
+    self.wikiText('');
+    self.wikiLink('');
+  }
+
+  // Retrieve random image with hashtag from tumblr
+  this.getTumblrImage = function(location){
+    var tagName = self.makeTumblrTag(location.wpName);
+    var url = "http://api.tumblr.com/v2/tagged";
+    url = url + "?" + $.param({
+      tag: tagName,
+      api_key: "aoloyllD0QRXr4toHoVw2JHtgk84hzphCHiUSvbeCMBpd4SwDt"
+    });
     console.log(url);
-    // $.getJSON(url, function(data){
-    //   console.log(data);
-    //   var date = data['index']['dat'];
-    //   var temp = data['index']['temp'];
-    //   var visibility = data['index']['sicht'];
-    // })
-    // .fail(function(){
-    //   self.waterInfo("Could not load water information");
-    // });
     $.ajax({
       url: url,
       dataType: 'jsonp',
-      // contentType: 'application/json',
-      cache: true,
     })
     .done(function(data){
-      console.log(data);
-      var date = data['index']['dat'];
-      var temp = data['index']['temp'];
-      var visibility = data['index']['sicht'];
+      // Make sure that there are blog posts with our tag
+      var numberPosts = data.response.length;
+      if (numberPosts) {
+        var imgLink = '';
+        var altText = 'Image with the hashtag '+ location.name + '';
+        var imgCredits = '';
+        var randBlogNo = Math.floor(Math.random() * numberPosts);
+        var blog = data.response[randBlogNo];
+        while (blog.photos === undefined){
+          randBlogNo = Math.floor(Math.random() * numberPosts);
+          blog = data.response[randBlogNo];
+        }
+        var imgNo = blog.photos[Math.floor(Math.random()*blog.photos.length)];
+        var imgLink = imgNo.alt_sizes[1].url;
+        self.tumblrImg('<img src="'+ imgLink + '" alt="'+ altText +'"/>');
+        self.blogName("Photo by " + blog.blog_name);
+        self.postLink(blog.post_url);
+        self.tumblrTag('Image from tumblr with #' + tagName);
+      }
+      else {
+        self.tumblrImg('Looks like nobody has posted an image with #' + tagName + ' on tumblr yet!');
+      }
     })
     .fail(function(){
-      self.waterInfo("Could not load water information")
+      self.tumblrImg('We were unable to retrieve an image for this location :(');
+    })
+  }
+
+  // Clear tumblr stuff
+  this.clearTumblrImg = function(){
+    self.tumblrImg('');
+    self.tumblrTag('');
+    self.blogName('');
+    self.postLink('');
+  }
+
+  // Retrieve information about water quality and temperature from Berlin API
+  this.getWaterInfo = function(location){
+    var query = self.makeSafeURI(location.name);
+    var url = 'https://cors-anywhere.herokuapp.com/www.berlin.de/lageso/gesundheit/gesundheitsschutz/badegewaesser/liste-der-badestellen/index.php/index.json';
+    url = url + '?badname=' + query;
+    $.getJSON(url, function(data){
+      var date = data['index'][0]['dat'];
+      var temp = data['index'][0]['temp'];
+      var visibility = data['index'][0]['sicht'];
+      var quality = data['index'][0]['wasserqualitaet']
+      self.waterInfo("Last sampled: " + date + "<br>" +
+                     "Water temperature: " + temp + "˚C" + "<br>" +
+                     "Visibility: " + visibility + "cm" + "<br>" +
+                     "Quality: " + quality);
+    })
+    .fail(function(){
+      self.waterInfo("Could not load water information");
     });
+  }
+
+  this.clearWaterInfo = function(){
+    self.waterInfo(textContent.helpers.loading);
+  }
+
+  // Remove name add-ons like "(Fluss)" and "Berlin-" from wikipedia name
+  this.makeTumblrTag = function(name){
+    name = name.replace("Berlin-", "");
+    name = name.replace(/ *\([^)]*\) */g, "");
+    name = name.replace(/_/g, " ");
+    return name;
   }
 
 

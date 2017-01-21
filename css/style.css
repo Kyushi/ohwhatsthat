@@ -19,9 +19,6 @@ body {
 body {
   width: 100%;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 14px;
-  font-weight: 200;
-  line-height: 1.35em;
   background: #777 url("../img/background.jpg") no-repeat center;
   padding: 0; }
 
@@ -39,9 +36,23 @@ body {
 .fine {
   font-weight: 100; }
 
+.link {
+  cursor: pointer; }
+
 h2 {
   font-size: 18px;
   font-weight: 300; }
+
+h3 {
+  font-size: 16px;
+  font-weight: 200;
+  line-height: 2em; }
+
+p,
+a {
+  font-size: 14px;
+  font-weight: 100;
+  line-height: 1.35em; }
 
 .fullscreen {
   position: absolute;
@@ -95,6 +106,9 @@ input {
   border-top: 1px solid #777;
   width: auto;
   padding: 2px; }
+
+.location-list-item {
+  width: 100%; }
 
 #info-window {
   position: absolute;

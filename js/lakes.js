@@ -4,7 +4,7 @@ lakes = [
             "13.1423644",
             "52.4349108"
         ],
-        "name": "Alter Hof / Unterhavel",
+        "name": "Alter Hof",
         "wpName": "Havel"
     },
     {
@@ -20,7 +20,7 @@ lakes = [
             "13.180702",
             "52.4648988"
         ],
-        "name": "Breitehorn / Unterhavel",
+        "name": "Breitehorn",
         "wpName": "Havel"
     },
     {
@@ -28,7 +28,7 @@ lakes = [
             "13.2136153",
             "52.5866148"
         ],
-        "name": "B\u00fcrgerablage / Oberhavel",
+        "name": "B\u00fcrgerablage",
         "wpName": "Havel"
     },
     {
@@ -52,7 +52,7 @@ lakes = [
             "13.6306004",
             "52.445554"
         ],
-        "name": "Seebad Friedrichshagen",
+        "name": "Friedrichshagen, Seebad",
         "wpName": "M\u00fcggelsee"
     },
     {
@@ -60,7 +60,7 @@ lakes = [
             "13.5758086",
             "52.4418048"
         ],
-        "name": "Flussbad Gartenstra\u00dfe",
+        "name": "Gartenstra\u00dfe, Flussbad",
         "wpName": "Dahme_(Fluss)"
     },
     {
@@ -92,7 +92,7 @@ lakes = [
             "13.1901394",
             "52.4527308"
         ],
-        "name": "Gro\u00dfe Steinlanke / Unterhavel",
+        "name": "Gro\u00dfe Steinlanke",
         "wpName": "Havel"
     },
     {
@@ -100,7 +100,7 @@ lakes = [
             "13.600676",
             "52.41259"
         ],
-        "name": "Freibad Gr\u00fcnau",
+        "name": "Gr\u00fcnau",
         "wpName": "Berlin-Grünau"
     },
     {
@@ -108,7 +108,7 @@ lakes = [
             "13.1952991",
             "52.4840688"
         ],
-        "name": "Grunewaldturm / Unterhavel",
+        "name": "Grunewaldturm",
         "wpName": "Havel"
     },
     {
@@ -124,7 +124,7 @@ lakes = [
             "13.2152176",
             "52.6030848"
         ],
-        "name": "Freibad Heiligensee",
+        "name": "Heiligensee, Freibad",
         "wpName": "Heiligensee_(See)"
     },
     {
@@ -132,7 +132,7 @@ lakes = [
             "13.27645",
             "52.545394"
         ],
-        "name": "Freibad Jungfernheide",
+        "name": "Jungfernheide, Freibad",
         "wpName": "Jungfernheide"
     },
     {
@@ -140,7 +140,7 @@ lakes = [
             "13.1858176",
             "52.4754918"
         ],
-        "name": "Kleine Badewiese / Unterhavel",
+        "name": "Kleine Badewiese",
         "wpName": "Havel"
     },
     {
@@ -164,7 +164,7 @@ lakes = [
             "13.1973424",
             "52.4718738"
         ],
-        "name": "Lieper Bucht / Unterhavel",
+        "name": "Lieper Bucht",
         "wpName": "Havel"
     },
     {
@@ -180,7 +180,7 @@ lakes = [
             "13.670136",
             "52.448154"
         ],
-        "name": "Strandbad M\u00fcggelsee",
+        "name": "M\u00fcggelsee, Strandbad",
         "wpName": "M\u00fcggelsee"
     },
     {
@@ -188,7 +188,7 @@ lakes = [
             "13.485932",
             "52.550944"
         ],
-        "name": "Strandbad Orankesee",
+        "name": "Orankesee, Strandbad",
         "wpName": "Orankesee"
     },
     {
@@ -196,7 +196,7 @@ lakes = [
             "13.331186",
             "52.545116"
         ],
-        "name": "Freibad Pl\u00f6tzensee",
+        "name": "Pl\u00f6tzensee, Freibad",
         "wpName": "Pl\u00f6tzensee"
     },
     {
@@ -204,7 +204,7 @@ lakes = [
             "13.1891986",
             "52.4607318"
         ],
-        "name": "Radfahrerwiese / Unterhavel",
+        "name": "Radfahrerwiese",
         "wpName": "Havel"
     },
     {
@@ -212,7 +212,7 @@ lakes = [
             "13.2227146",
             "52.5963078"
         ],
-        "name": "Sandhauser Stra\u00dfe / Oberhavel",
+        "name": "Sandhauser Stra\u00dfe",
         "wpName": "Havel"
     },
     {
@@ -244,7 +244,7 @@ lakes = [
             "13.24728",
             "52.579568"
         ],
-        "name": "Freibad Tegeler See",
+        "name": "Tegeler See, Freibad",
         "wpName": "Tegeler_See"
     },
     {
@@ -252,7 +252,7 @@ lakes = [
             "13.2572302",
             "52.5701718"
         ],
-        "name": "gegen\u00fcber Reiswerder / Tegeler See",
+        "name": "Tegeler See, gegen\u00fcber Reiswerder",
         "wpName": "Tegeler_See"
     },
     {
@@ -260,7 +260,7 @@ lakes = [
             "13.246411",
             "52.5773628"
         ],
-        "name": "gegen\u00fcber Scharfenberg / Tegeler See",
+        "name": "Tegeler See, gegen\u00fcber Scharfenberg",
         "wpName": "Tegeler_See"
     },
     {
@@ -268,7 +268,7 @@ lakes = [
             "13.2574801",
             "52.5868758"
         ],
-        "name": "Reiherwerder / Tegeler See",
+        "name": "Tegeler See, Reiherwerder",
         "wpName": "Tegeler_See"
     },
     {
@@ -276,7 +276,7 @@ lakes = [
             "13.250527",
             "52.5661668"
         ],
-        "name": "Saatwinkel / Tegeler See",
+        "name": "Tegeler See, Saatwinkel",
         "wpName": "Tegeler_See"
     },
     {
@@ -292,7 +292,7 @@ lakes = [
             "13.1755864",
             "52.4405718"
         ],
-        "name": "Strandbad Wannsee",
+        "name": "Wannsee, Strandbad",
         "wpName": "Strandbad_Wannsee"
     },
     {
@@ -300,7 +300,7 @@ lakes = [
             "13.465316",
             "52.553892"
         ],
-        "name": "Seebadeanstalt Wei\u00dfensee",
+        "name": "Wei\u00dfensee, Seebadeanstalt",
         "wpName": "Wei\u00dfer_See_(Berlin)"
     },
     {
@@ -308,7 +308,7 @@ lakes = [
             "13.5999899",
             "52.41515"
         ],
-        "name": "Freibad Wendenschloss",
+        "name": "Wendenschloss, Freibad",
         "wpName": "Wendenschlo\u00df"
     }
 ]

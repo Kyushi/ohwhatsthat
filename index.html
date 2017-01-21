@@ -39,23 +39,36 @@
 
         <div class="locations" data-bind="foreach: searchResults">
           <div class="location">
-            <span data-bind="text: name, click: $parent.loadCurrentLocation" id="location-list-item"></span>
+            <span data-bind="text: name, click: $parent.loadCurrentLocation" class="location-list-item link"></span>
           </div>
         </div>
 
-        <footer class="black small text-center" data-bind="text: footerText">
+        <footer class="black small text-center">
+          <span data-bind="text: footerText"></span> |
+          <span data-bind="text: impressumLink, click: showPageInfo" class="link"></span>
+          <p data-bind="text: credits, visible: false"></p>
         </footer>
 
         <div id="info-window" class="black" data-bind="visible: hasCurrentLocation">
           <!-- <div class="info-window black"> -->
             <div class="info-header black">
-              <h2 id="info-title" data-bind="text: infoTitle, click: bounceMarker"></h2>
+              <h2 id="info-title" class="link" data-bind="text: infoTitle, click: bounceMarker"></h2>
               <div class="close black fine" data-bind="text: close, click: clearCurrentLocation">
               </div>
             </div>
             <div id="info-body" class="black">
-              <p data-bind="html: infoText" class="fine">
-              </p>
+              <h3>Water quality in this location according to LaGeSo</h3>
+              <p data-bind="html: waterInfo"></p>
+              <h3>Short info from Wikipedia</h3>
+              <p data-bind="html: wikiText"></p>
+              <a data-bind="attr: {href: wikiLink}" target="_blank">Read Wikipedia article</a>
+              <div class="tumblr-img">
+                <h3 data-bind="text: tumblrTag"></h3>
+                <a data-bind="attr: {href: postLink}" target="_blank">
+                  <div class="img" data-bind="html: tumblrImg"></div>
+                  <p data-bind="text: blogName"></p>
+                </a>
+              </div>
             </div>
           <!-- </div> -->
         </div>
