@@ -226,7 +226,7 @@ function owtViewModel() {
         }
         var imgNo = blog.photos[Math.floor(Math.random()*blog.photos.length)];
         var imgLink = imgNo.alt_sizes[1].url;
-        self.tumblrImg('<img src="'+ imgLink + '" alt="'+ altText +'"/>');
+        self.tumblrImg('<img src="'+ imgLink + '" alt="'+ altText +'" class="img" />');
         self.blogName("Photo by " + blog.blog_name);
         self.postLink(blog.post_url);
         self.tumblrTag('Image from tumblr with #' + tagName);

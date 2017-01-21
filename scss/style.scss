@@ -103,6 +103,10 @@ header {
   font-weight: 400;
 }
 
+.tumblr-img,
+.img {
+  max-width: 100%;
+}
 
 #map {
   width: 100%;
@@ -178,6 +182,7 @@ input {
   letter-spacing: 0.3em;
   padding: 0.333em;
   height: 90%;
+  width: 100%;
   overflow: scroll;
 }
 
