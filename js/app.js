@@ -75,13 +75,13 @@ function owtViewModel() {
   // Observables for info window
   this.infoTitle = ko.observable('');
   this.waterInfoError = ko.observable('');
-  this.sampleDate = ko.observable('');
-  this.waterQuality = ko.observable('');
-  this.visibility = ko.observable('');
-  this.waterTemperature = ko.observable('');
+  this.sampleDate = ko.observable('Loading ...');
+  this.waterQuality = ko.observable('Loading ...');
+  this.visibility = ko.observable('Loading ...');
+  this.waterTemperature = ko.observable('Loading ...');
   this.wikiError = ko.observable('');
-  this.wikiText = ko.observable('');
-  this.wikiLink = ko.observable('');
+  this.wikiText = ko.observable('Loading ...');
+  this.wikiLink = ko.observable('Loading ...');
   this.hasWikiLink = ko.computed(function(){
     return self.wikiLink().length > 0;
   })
@@ -89,13 +89,13 @@ function owtViewModel() {
   this.clearInfoWindow = function(){
     this.infoTitle('');
     this.waterInfoError('');
-    this.sampleDate('');
-    this.waterQuality('');
-    this.visibility('');
-    this.waterTemperature('');
+    this.sampleDate('Loading ...');
+    this.waterQuality('Loading ...');
+    this.visibility('Loading ...');
+    this.waterTemperature('Loading ...');
     this.wikiError('');
-    this.wikiText('');
-    this.wikiLink('');
+    this.wikiText('Loading ...');
+    this.wikiLink('Loading ...');
   }
 
   // Obserrvable for info window
