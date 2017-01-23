@@ -1,3 +1,7 @@
+// TODO: Make info retrieved by api part of location object and check whether
+// the reference already exists before doing another JSON request -> API and
+// mobile-data friendly
+
 // Set global map variable
 var map;
 
@@ -21,15 +25,17 @@ function owtViewModel() {
   this.locationList.forEach(function(location){
     location.marker.addListener('click', function(){
       self.setCurrentLocation(location);
-      self.bounceMarker(location);
-      self.getWikiInfo(location);
-      self.getTumblrImage(location);
+      self.bounceMarker();
+      model.currentLocation(location);
+      self.toggleVisible();
     });
   });
 
   // Set and get current location
   this.setCurrentLocation = function(location) {
     model.currentLocation(location);
+    self.getWikiInfo();
+    self.getWaterInfo();
   }
 
   this.getCurrentLocation = function() {
@@ -38,14 +44,23 @@ function owtViewModel() {
 
   // check if currentLocation is set and return boolean
   this.hasCurrentLocation = ko.computed(function(){
-    return self.getCurrentLocation() ? true : false;
+    return self.getCurrentLocation() === null ? true : false;
   });
+
+  // React to click in search result list
+  this.loadCurrentLocation = function(){
+    self.setCurrentLocation(this);
+    self.infoTitle(this.name);
+    self.getWikiInfo();
+    self.bounceMarker(this);
+    self.centerMap();
+    self.toggleVisible();
+  }
 
   this.clearCurrentLocation = function(){
     model.currentLocation(null);
-    self.clearWikiInfo();
-    self.clearWaterInfo();
-    self.clearTumblrImg();
+    self.toggleVisible();
+    self.clearInfoWindow();
     self.resetMapCenter();
   }
 
@@ -56,24 +71,40 @@ function owtViewModel() {
   this.footerText = ko.observable(textContent.footer.footerText);
   this.impressumLink = ko.observable(textContent.footer.impressum);
   this.credits = ko.observable(textContent.footer.credits);
-  // Observable for wikipedia infoText and link to article
+
+  // Observables for info window
+  this.infoTitle = ko.observable('');
+  this.waterInfoError = ko.observable('');
+  this.sampleDate = ko.observable('');
+  this.waterQuality = ko.observable('');
+  this.visibility = ko.observable('');
+  this.waterTemperature = ko.observable('');
+  this.wikiError = ko.observable('');
   this.wikiText = ko.observable('');
   this.wikiLink = ko.observable('');
-  // Observable for water quality info
-  this.waterInfo = ko.observable(textContent.helpers.loading);
-  // Compile html for infoText window
-  this.infoText = ko.computed(function(){
-    return "<br>" + self.waterInfo() + "<br>" + self.wikiText();
-  });
-  // Observable for info window title
-  this.infoTitle = ko.computed(function(){
-    return self.hasCurrentLocation() ? self.getCurrentLocation().name : null;
-  });
-  // Observables for tumblr info
-  this.tumblrImg = ko.observable('');
-  this.postLink = ko.observable('');
-  this.blogName = ko.observable('');
-  this.tumblrTag = ko.observable('');
+  this.hasWikiLink = ko.computed(function(){
+    return self.wikiLink().length > 0;
+  })
+
+  this.clearInfoWindow = function(){
+    this.infoTitle('');
+    this.waterInfoError('');
+    this.sampleDate('');
+    this.waterQuality('');
+    this.visibility('');
+    this.waterTemperature('');
+    this.wikiError('');
+    this.wikiText('');
+    this.wikiLink('');
+  }
+
+  // Obserrvable for info window
+  this.visibleInfo = ko.observable(false);
+
+  // Function to toggle visibility of info window
+  this.toggleVisible = function(){
+    self.visibleInfo(!self.visibleInfo());
+  }
 
   // Show markers of search results
   this.showMarkers = function(results){
@@ -103,16 +134,6 @@ function owtViewModel() {
   this.resetMapCenter = function(){
     map.setCenter({lat: 52.515, lng: 13.415});
     map.setZoom(10);
-  }
-
-  // React to click in search result list
-  this.loadCurrentLocation = function(){
-    self.setCurrentLocation(this);
-    self.bounceMarker(this);
-    self.getWikiInfo(this);
-    self.centerMap();
-    self.getTumblrImage(this);
-    self.getWaterInfo(this);
   }
 
   // Function to enlarge footer to show page info-title
@@ -153,16 +174,41 @@ function owtViewModel() {
       }
     }
     self.searchResults(results);
-    // self.showMarkers(results);
+  }
+
+  // Load wiki info from location data or get from API
+  this.getWikiInfo = function(){
+    var loc = self.getCurrentLocation();
+    if (loc.wikiInfo === undefined) {
+      self.getWikiData(loc);
+    }
+    else {
+      self.loadWikiInfo(loc);
+    }
+  }
+
+  // Load wiki info into Observables
+  this.loadWikiInfo = function(loc){
+    if (loc.wikiInfo.timeout !== undefined) {
+      self.wikiText(loc.wikiInfo.timeout);
+    }
+    else if (loc.wikiInfo.err !== undefined) {
+      self.wikiError(loc.wikiInfo.err);
+    }
+    else {
+      self.wikiText(loc.wikiInfo.wikiText);
+      self.wikiLink(loc.wikiInfo.wikiLink);
+    }
   }
 
   // Retrieve Wikipedia info
-  this.getWikiInfo = function(location){
+  this.getWikiData = function(loc){
     // set TimeOut
     var wikiRequestTimeout = setTimeout(function(){
-      self.wikiText = "Looks like the data was delivered by a sloth. The request timed out."
+      loc.wikiInfo.wikiText = "Looks like the data was delivered by a" +
+                                   " sloth. The request timed out."
     }, 8000);
-    var pageTitle = location.wpName;
+    var pageTitle = loc.wpName;
     var wpurl = "https://de.wikipedia.org/w/api.php";
     wpurl = wpurl + '?' + $.param({
       'format': "json",
@@ -176,100 +222,82 @@ function owtViewModel() {
       dataType: 'jsonp'
     })
     .done(function(data){
-      var article_url = "http://de.wikipedia.org/wiki/" + pageTitle;
-      var result = data.query.pages;
-      var extract;
-      $.each(result, function(i){
-        // title = result[i]["title"];
-        extract = result[i]["extract"];
-      });
-      self.wikiText(extract);
-      self.wikiLink(article_url);
+      console.log(data);
       clearTimeout(wikiRequestTimeout);
-    })
-    .fail(function(){
-      self.wikiText("Something went wrong when trying to retrieve info from Wikipedia.")
-    })
-  }
-
-  // Clear wiki info when
-  this.clearWikiInfo = function(){
-    self.wikiText('');
-    self.wikiLink('');
-  }
-
-  // Retrieve random image with hashtag from tumblr
-  this.getTumblrImage = function(location){
-    var tagName = self.makeTumblrTag(location.wpName);
-    var url = "http://api.tumblr.com/v2/tagged";
-    url = url + "?" + $.param({
-      tag: tagName,
-      api_key: "aoloyllD0QRXr4toHoVw2JHtgk84hzphCHiUSvbeCMBpd4SwDt"
-    });
-    console.log(url);
-    $.ajax({
-      url: url,
-      dataType: 'jsonp',
-    })
-    .done(function(data){
-      // Make sure that there are blog posts with our tag
-      var numberPosts = data.response.length;
-      if (numberPosts) {
-        var imgLink = '';
-        var altText = 'Image with the hashtag '+ location.name + '';
-        var imgCredits = '';
-        var randBlogNo = Math.floor(Math.random() * numberPosts);
-        var blog = data.response[randBlogNo];
-        while (blog.photos === undefined){
-          randBlogNo = Math.floor(Math.random() * numberPosts);
-          blog = data.response[randBlogNo];
-        }
-        var imgNo = blog.photos[Math.floor(Math.random()*blog.photos.length)];
-        var imgLink = imgNo.alt_sizes[1].url;
-        self.tumblrImg('<img src="'+ imgLink + '" alt="'+ altText +'" class="img" />');
-        self.blogName("Photo by " + blog.blog_name);
-        self.postLink(blog.post_url);
-        self.tumblrTag('Image from tumblr with #' + tagName);
+      loc.wikiInfo = {};
+      if (-1 in data.query.pages) {
+        loc.wikiInfo.err = "Oops, looks like there is nothing written" +
+                                " about this on Wikipedia"
       }
       else {
-        self.tumblrImg('Looks like nobody has posted an image with #' + tagName + ' on tumblr yet!');
+        var article_url = "http://de.wikipedia.org/wiki/" + pageTitle;
+        var result = data.query.pages;
+        var extract;
+        $.each(result, function(i){
+          extract = result[i]["extract"];
+        });
+        loc.wikiInfo.wikiText = extract;
+        loc.wikiInfo.wikiLink = article_url;
       }
     })
     .fail(function(){
-      self.tumblrImg('We were unable to retrieve an image for this location :(');
+      loc.wikiInfo = {};
+      loc.wikiInfo.err = "Something went wrong when trying to" +
+                                   "retrieve info from Wikipedia."
     })
+    .always(function(){
+      self.loadWikiInfo(loc);
+
+    });
   }
 
-  // Clear tumblr stuff
-  this.clearTumblrImg = function(){
-    self.tumblrImg('');
-    self.tumblrTag('');
-    self.blogName('');
-    self.postLink('');
+
+  // Get information about the water quality, temperature etc.
+  this.getWaterInfo = function(){
+    var loc = self.getCurrentLocation();
+    if (loc.waterInfo === undefined) {
+      self.getWaterData(loc);
+    }
+    else {
+      loadWaterInfo();
+    }
+  }
+
+  // Laod water info into observables
+  this.loadWaterInfo = function(loc){
+    if (loc.waterInfo.err !== undefined){
+      self.waterInfoError(loc.waterInfo.err);
+    }
+    else {
+      self.sampleDate(loc.waterInfo.dat);
+      self.waterQuality(loc.waterInfo.wasserqualitaet);
+      self.waterTemperature(loc.waterInfo.temp);
+      self.visibility(loc.waterInfo.sicht);
+    }
   }
 
   // Retrieve information about water quality and temperature from Berlin API
-  this.getWaterInfo = function(location){
-    var query = self.makeSafeURI(location.name);
+  this.getWaterData = function(loc){
+    // var loc = self.getCurrentLocation();
+    var query = self.makeSafeURI(loc.name);
     var url = 'https://cors-anywhere.herokuapp.com/www.berlin.de/lageso/gesundheit/gesundheitsschutz/badegewaesser/liste-der-badestellen/index.php/index.json';
     url = url + '?badname=' + query;
     $.getJSON(url, function(data){
-      var date = data['index'][0]['dat'];
-      var temp = data['index'][0]['temp'];
-      var visibility = data['index'][0]['sicht'];
-      var quality = data['index'][0]['wasserqualitaet']
-      self.waterInfo("Last sampled: " + date + "<br>" +
-                     "Water temperature: " + temp + "˚C" + "<br>" +
-                     "Visibility: " + visibility + "cm" + "<br>" +
-                     "Quality: " + quality);
+      if (data.index.length > 0){
+        loc.waterInfo = data.index[0];
+      }
+      else {
+        loc.waterInfo = {};
+        loc.waterInfo.err = "Looks like there was no info for this";
+      }
     })
     .fail(function(){
-      self.waterInfo("Could not load water information");
+      loc.waterInfo = {};
+      loc.waterInfo.err = "Could not load water information";
+    })
+    .always(function(){
+      self.loadWaterInfo(loc);
     });
-  }
-
-  this.clearWaterInfo = function(){
-    self.waterInfo(textContent.helpers.loading);
   }
 
   // Remove name add-ons like "(Fluss)" and "Berlin-" from wikipedia name
@@ -290,6 +318,7 @@ function owtViewModel() {
     return string
   }
 }
+
 
 // Location constructor
 var Location = function(data) {

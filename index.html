@@ -33,42 +33,76 @@
             <span class="entypo-search"></span>
           </div>
           <div class="input">
-            <input type="text" data-bind="textInput: searchString, event: {keyup: liveSearch}">
+            <input
+              type="text"
+              data-bind="textInput: searchString, event: {keyup: liveSearch}"
+              >
+            </input>
           </div>
         </div>
 
         <div class="locations" data-bind="foreach: searchResults">
           <div class="location">
-            <span data-bind="text: name, click: $parent.loadCurrentLocation" class="location-list-item link"></span>
+            <span data-bind="text: name, click: $parent.loadCurrentLocation"
+                  class="location-list-item link"
+                  >
+            </span>
           </div>
         </div>
 
         <footer class="black small text-center">
           <span data-bind="text: footerText"></span> |
-          <span data-bind="text: impressumLink, click: showPageInfo" class="link"></span>
+          <span data-bind="text: impressumLink, click: showPageInfo"
+                class="link">
+          </span>
           <p data-bind="text: credits, visible: false"></p>
         </footer>
 
-        <div id="info-window" class="black" data-bind="visible: hasCurrentLocation">
+        <div id="info-window" class="black"
+             data-bind="if: visibleInfo, visible: visibleInfo">
           <!-- <div class="info-window black"> -->
             <div class="info-header black">
-              <h2 id="info-title" class="link" data-bind="text: infoTitle, click: bounceMarker"></h2>
-              <div class="close black fine" data-bind="text: close, click: clearCurrentLocation">
+              <h2 id="info-title"
+                  class="link"
+                  data-bind="text: infoTitle, click: bounceMarker">
+              </h2>
+              <div class="close black fine"
+                   data-bind="text: close, click: clearCurrentLocation">
               </div>
             </div>
             <div id="info-body" class="black">
-              <h3>Water quality in this location according to LaGeSo</h3>
-              <p data-bind="html: waterInfo"></p>
+              <h3>Water quality in this location</h3>
+              <p data-bind="text: waterInfoError" class="error"></p>
+              <p>
+                <span>Last sampled: </span>
+                <span
+                  data-bind="text: sampleDate">
+                </span>
+              </p>
+              <p>
+                <span>Quality: </span>
+                <span
+                  data-bind="text: waterQuality">
+                </span>
+              </p>
+              <p>
+                <span>Temperature: </span>
+                <span
+                  data-bind="text: waterTemperature">
+                </span> ˚C
+              </p>
+              <p>
+                <span>Visibility: </span>
+                <span
+                  data-bind="text: visibility">
+                </span> cm
+              </p>
               <h3>Short info from Wikipedia</h3>
+              <p data-bind="text: wikiError" class="error"></p>
               <p data-bind="html: wikiText"></p>
-              <a data-bind="attr: {href: wikiLink}" target="_blank">Read Wikipedia article</a>
-              <div class="tumblr-img">
-                <h3 data-bind="text: tumblrTag"></h3>
-                <a data-bind="attr: {href: postLink}" target="_blank">
-                  <div class="img" data-bind="html: tumblrImg"></div>
-                  <p data-bind="text: blogName"></p>
-                </a>
-              </div>
+              <a data-bind="if: hasWikiLink, attr: {href: wikiLink}" target="_blank">
+                Read Wikipedia article
+              </a>
             </div>
           <!-- </div> -->
         </div>
@@ -78,7 +112,8 @@
 
     <!-- Load js files -->
     <!-- Load jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
     <!-- Load Knockout -->
     <script src="js/knockout-3.4.1.js"></script>
     <!-- Load google maps api -->

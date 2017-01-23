@@ -39,6 +39,9 @@ body {
 .link {
   cursor: pointer; }
 
+.error {
+  color: #a70000; }
+
 h2 {
   font-size: 18px;
   font-weight: 300; }
@@ -53,6 +56,9 @@ a {
   font-size: 14px;
   font-weight: 100;
   line-height: 1.35em; }
+
+a {
+  color: #777; }
 
 .fullscreen {
   position: absolute;
