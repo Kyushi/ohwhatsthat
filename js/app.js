@@ -102,7 +102,7 @@ function owtViewModel() {
     this.waterInfoError('');
     this.sampleDate('Loading ...');
     this.waterQuality('Loading ...');
-    this.visibility('Loading ...');
+    this.waterVisibility('Loading ...');
     this.waterTemperature('Loading ...');
     this.wikiError('');
     this.wikiText('Loading ...');
