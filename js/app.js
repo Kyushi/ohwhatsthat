@@ -1,7 +1,3 @@
-// TODO: Make info retrieved by api part of location object and check whether
-// the reference already exists before doing another JSON request -> API and
-// mobile-data friendly
-
 // Set global map variable
 var map;
 
@@ -9,7 +5,7 @@ var map;
 var model = {
   currentLocation: ko.observable(null),
   data: lakes
-}
+};
 
 // Viewmodel
 function owtViewModel() {
@@ -25,16 +21,19 @@ function owtViewModel() {
   this.locationList.forEach(function(location){
     location.marker.addListener('click', function(){
       self.setCurrentLocation(location);
-      self.bounceMarker();
-      model.currentLocation(location);
-      self.toggleVisible();
+      self.infoTitle(location.name);
+      self.bounceMarker(location);
+      self.centerMap();
+      self.getWikiInfo();
+      self.getWaterInfo();
+      self.visibleInfo(true);
     });
   });
 
   // Set and get current location
   this.setCurrentLocation = function(location) {
     model.currentLocation(location);
-  }
+  };
 
   this.getCurrentLocation = function() {
     return model.currentLocation();
@@ -53,15 +52,15 @@ function owtViewModel() {
     self.centerMap();
     self.getWikiInfo();
     self.getWaterInfo();
-    self.toggleVisible();
-  }
+    self.visibleInfo(true);
+  };
 
   this.clearCurrentLocation = function(){
     model.currentLocation(null);
-    self.toggleVisible();
+    self.visibleInfo(false);
     self.clearInfoWindow();
     self.resetMapCenter();
-  }
+  };
 
   // Load text from external source for easy localisation
   this.close = ko.observable(textContent.helpers.close);
@@ -83,7 +82,7 @@ function owtViewModel() {
   this.wikiLink = ko.observable('Loading ...');
   this.hasWikiLink = ko.computed(function(){
     return self.wikiLink().length > 0;
-  })
+  });
 
   // Observables for page info
   this.piTitle = ko.observable(textContent.pageInfo.title);
@@ -106,15 +105,15 @@ function owtViewModel() {
     this.wikiError('');
     this.wikiText('Loading ...');
     this.wikiLink('Loading ...');
-  }
+  };
 
   // Obserrvable for info window
   this.visibleInfo = ko.observable(false);
 
   // Function to toggle visibility of info window
-  this.toggleVisible = function(){
-    self.visibleInfo(!self.visibleInfo());
-  }
+  // this.toggleVisible = function(){
+  //   self.visibleInfo(!self.visibleInfo());
+  // };
 
   // Show markers of search results
   this.showMarkers = function(results){
@@ -123,7 +122,7 @@ function owtViewModel() {
       var visible = results.includes(loc[i]);
       self.locationList[i].marker.setVisible(visible);
     }
-  }
+  };
 
   // Bounce marker 3 times when clicking on search result
   this.bounceMarker = function(){
@@ -131,34 +130,34 @@ function owtViewModel() {
     location.marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function(){
       location.marker.setAnimation(null);
-    }, 2100)
-  }
+    }, 2100);
+  };
 
   // Center map on current marker's position
   this.centerMap = function(){
     var position = self.getCurrentLocation().marker.position;
     map.setCenter(position);
     map.setZoom(13);
-  }
+  };
 
   this.resetMapCenter = function(){
     map.setCenter({lat: 52.515, lng: 13.415});
     map.setZoom(10);
-  }
+  };
 
   // Function to enlarge footer to show page info-title
   this.showPageInfo = ko.observable(false);
 
   this.togglePageInfo = function(){
     self.showPageInfo(!self.showPageInfo());
-  }
+  };
 
   // Everything relating to search below this
 
   // show or hide search bar
   this.toggleSearch = function(){
     $(".popout").toggle();
-  }
+  };
 
   // searchString for testing
   this.searchString = ko.observable('');
@@ -186,7 +185,7 @@ function owtViewModel() {
       }
     }
     self.searchResults(results);
-  }
+  };
 
   // Load wiki info from location data or get from API
   this.getWikiInfo = function(){
@@ -197,7 +196,7 @@ function owtViewModel() {
     else {
       self.loadWikiInfo(loc);
     }
-  }
+  };
 
   // Load wiki info into Observables
   this.loadWikiInfo = function(loc){
@@ -211,7 +210,7 @@ function owtViewModel() {
       self.wikiText(loc.wikiInfo.wikiText);
       self.wikiLink(loc.wikiInfo.wikiLink);
     }
-  }
+  };
 
   // Retrieve Wikipedia info
   this.getWikiData = function(loc){
@@ -234,7 +233,6 @@ function owtViewModel() {
       dataType: 'jsonp'
     })
     .done(function(data){
-      console.log(data);
       clearTimeout(wikiRequestTimeout);
       loc.wikiInfo = {};
       if (-1 in data.query.pages) {
@@ -261,7 +259,7 @@ function owtViewModel() {
       self.loadWikiInfo(loc);
 
     });
-  }
+  };
 
 
   // Get information about the water quality, temperature etc.
@@ -271,9 +269,9 @@ function owtViewModel() {
       self.getWaterData(loc);
     }
     else {
-      loadWaterInfo();
+      self.loadWaterInfo(loc);
     }
-  }
+  };
 
   // Laod water info into observables
   this.loadWaterInfo = function(loc){
@@ -281,12 +279,13 @@ function owtViewModel() {
       self.waterInfoError(loc.waterInfo.err);
     }
     else {
+      self.waterInfoError('');
       self.sampleDate(loc.waterInfo.dat);
       self.waterQuality(loc.waterInfo.wasserqualitaet);
       self.waterTemperature(loc.waterInfo.temp);
       self.waterVisibility(loc.waterInfo.sicht);
     }
-  }
+  };
 
   // Retrieve information about water quality and temperature from Berlin API
   this.getWaterData = function(loc){
@@ -310,7 +309,7 @@ function owtViewModel() {
     .always(function(){
       self.loadWaterInfo(loc);
     });
-  }
+  };
 
   // Remove name add-ons like "(Fluss)" and "Berlin-" from wikipedia name
   this.makeTumblrTag = function(name){
@@ -318,7 +317,7 @@ function owtViewModel() {
     name = name.replace(/ *\([^)]*\) */g, "");
     name = name.replace(/_/g, " ");
     return name;
-  }
+  };
 
 
   this.makeSafeURI = function(string){
@@ -329,7 +328,7 @@ function owtViewModel() {
     string = string.replace(/\//, "%2F");
     return string
   }
-}
+};
 
 
 // Location constructor
@@ -343,7 +342,7 @@ var Location = function(data) {
     title: self.name,
     map: map
   });
-}
+};
 
 
 // Initialise map, centered on Berlin, with markers
@@ -361,4 +360,4 @@ function initMap() {
   var markers = owt.locationList.map(function(location){
     return location.marker;
   });
-}
+};
