@@ -15,17 +15,19 @@
   <body>
     <div class="fullscreen">
 
-      <header class="text-center black">
-        <p class="col-12 logo" data-bind="text: title">
-        </p>
-      </header>
+      <div id="page-top">
+        <header class="text-center black">
+          <p class="col-12 logo" data-bind="text: title">
+          </p>
+        </header>
 
-      <div id="map">
+        <div id="map">
+        </div>
       </div>
 
-      <div class="page-bottom black">
+      <div id="page-bottom" class="black">
 
-        <div class="search">
+        <div id="search">
           <div class="search-icon">
             <span class="entypo-search"></span>
           </div>
@@ -38,7 +40,7 @@
           </div>
         </div>
 
-        <div class="locations" data-bind="foreach: searchResults">
+        <div id="locations" data-bind="foreach: searchResults">
           <div class="location">
             <span data-bind="text: name, click: $parent.loadCurrentLocation"
                   class="location-list-item link"

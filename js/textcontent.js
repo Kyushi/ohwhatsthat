@@ -13,7 +13,7 @@ var textContent = {
     title: "About this page",
     close: "Click to close",
     responsibility: "Responsible for this website: Franziskus Nakajima",
-    contact: "contact",
+    contact: "Contact: ",
     email: "info@franziskusnakajima.net",
     github: "https://github.com/Kyushi/ohwhatsthere",
     wikiAPI: "https://www.mediawiki.org/wiki/API:Main_page",

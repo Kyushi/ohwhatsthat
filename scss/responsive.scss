@@ -1,1 +1,46 @@
 // CSS for responsiveness outside of the scope of bootstrap goes here
+@media screen and (min-width: 640px) {
+  #page-top {
+    width: 50%;
+    height: 100%;
+    float: left;
+  }
+
+  #page-bottom {
+    width: 50%;
+    height: 100%;
+    float: right;
+    z-index: 0;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  #page-top {
+    width: 65%;
+  }
+
+  #page-bottom {
+    width: 35%;
+  }
+
+  header,
+  #search {
+    height: 10%;
+  }
+
+  #map,
+  #locations,
+  #info-window {
+    height: 90%;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  #page-top {
+    width: 75%;
+  }
+
+  #page-bottom {
+    width: 25%;
+  }
+}

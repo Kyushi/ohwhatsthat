@@ -19,7 +19,7 @@ body {
 body {
   width: 100%;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
-  background: #ccc url("../img/background.jpg") no-repeat center;
+  background: #000001 url("../img/background.jpg") no-repeat center;
   padding: 0; }
 
 .black {
@@ -64,13 +64,17 @@ a {
   color: #ccc; }
 
 .fullscreen {
-  position: absolute;
   width: 100%;
+  margin: 0 auto;
   height: 100%;
   overflow: scroll; }
 
+#page-top {
+  height: 50%;
+  width: 100%; }
+
 header {
-  height: 7%; }
+  height: 15%; }
 
 .logo {
   font-size: 24px;
@@ -88,12 +92,15 @@ header {
 
 #map {
   width: 100%;
-  height: 43%; }
+  height: 85%; }
 
-.page-bottom {
-  position: fixed;
+#page-bottom {
+  position: relative;
   height: 50%;
   width: 100%; }
+
+#search {
+  height: 15%; }
 
 .search-icon {
   font-size: 18px;
@@ -110,7 +117,7 @@ input {
   color: #000001;
   font-size: 18px; }
 
-.locations {
+#locations {
   clear: both;
   height: 80%;
   overflow: scroll; }
@@ -126,7 +133,7 @@ input {
 #info-window {
   position: absolute;
   opacity: 1;
-  height: 100%;
+  height: 85%;
   width: 100%;
   bottom: 0; }
 
