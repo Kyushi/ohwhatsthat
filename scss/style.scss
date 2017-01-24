@@ -8,7 +8,7 @@ $red: #a70000;
 
 
 // Add zocial icons
-@import url(http://weloveiconfonts.com/api/?family=brandico|entypo);
+@import url(http://weloveiconfonts.com/api/?family=brandico|entypo|zocial);
 
 /* brandico */
 [class*="brandico-"]:before {
@@ -18,6 +18,11 @@ $red: #a70000;
 /* entypo */
 [class*="entypo-"]:before {
   font-family: 'entypo', sans-serif;
+}
+
+/* zocial */
+[class*="zocial-"]:before {
+  font-family: 'zocial', sans-serif;
 }
 
 // reset

@@ -1,4 +1,4 @@
-@import url(http://weloveiconfonts.com/api/?family=brandico|entypo);
+@import url(http://weloveiconfonts.com/api/?family=brandico|entypo|zocial);
 /* brandico */
 [class*="brandico-"]:before {
   font-family: 'brandico', sans-serif; }
@@ -6,6 +6,10 @@
 /* entypo */
 [class*="entypo-"]:before {
   font-family: 'entypo', sans-serif; }
+
+/* zocial */
+[class*="zocial-"]:before {
+  font-family: 'zocial', sans-serif; }
 
 * {
   margin: 0;

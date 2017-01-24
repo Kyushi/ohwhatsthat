@@ -93,7 +93,7 @@
               <p>
                 <span>Visibility: </span>
                 <span
-                  data-bind="text: visibility">
+                  data-bind="text: waterVisibility">
                 </span> cm
               </p>
               <h3>Short info from Wikipedia</h3>
@@ -118,15 +118,23 @@
                 data-bind="text: piTitle, click: bounceMarker">
             </h3>
             <div class="close black fine"
-                 data-bind="text: piClose">
+                 data-bind="text: close">
             </div>
           </div>
           <div class="info-body">
             <p data-bind="text: piResp"></p>
             <p data-bind="text: piContact"></p>
             <p data-bind="text: piEmail"></p>
-            <p><a data-bind="text: piGithub, attr: {href: piGithub}"></a></p>
-            <p><a data-bind="text: piWikiAPI, attr: {href: piWikiAPI}"></a></p>
+            <p>
+              <a data-bind="attr: {href: piGithub}">
+                <span class="brandico-github"> This page on github<span>
+              </a>
+            </p>
+            <p>
+              <a data-bind="attr: {href: piWikiAPI}">
+                <span class="zocial-wikipedia"> Wikipedia's API </span>
+              </a>
+            </p>
             <p><a data-bind="text: piCorsanywhere, attr: {href: piCorsanywhere}"></a></p>
             <p><a data-bind="text: piBerlinAPI, attr: {href: piBerlinAPI}"></a></p>
           </div>
