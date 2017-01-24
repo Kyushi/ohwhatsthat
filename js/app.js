@@ -207,6 +207,7 @@ function owtViewModel() {
       self.wikiError(loc.wikiInfo.err);
     }
     else {
+      self.wikiError('');
       self.wikiText(loc.wikiInfo.wikiText);
       self.wikiLink(loc.wikiInfo.wikiLink);
     }
