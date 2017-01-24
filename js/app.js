@@ -34,8 +34,6 @@ function owtViewModel() {
   // Set and get current location
   this.setCurrentLocation = function(location) {
     model.currentLocation(location);
-    self.getWikiInfo();
-    self.getWaterInfo();
   }
 
   this.getCurrentLocation = function() {
@@ -51,9 +49,10 @@ function owtViewModel() {
   this.loadCurrentLocation = function(){
     self.setCurrentLocation(this);
     self.infoTitle(this.name);
-    self.getWikiInfo();
     self.bounceMarker(this);
     self.centerMap();
+    self.getWikiInfo();
+    self.getWaterInfo();
     self.toggleVisible();
   }
 
@@ -77,7 +76,7 @@ function owtViewModel() {
   this.waterInfoError = ko.observable('');
   this.sampleDate = ko.observable('Loading ...');
   this.waterQuality = ko.observable('Loading ...');
-  this.visibility = ko.observable('Loading ...');
+  this.waterVisibility = ko.observable('Loading ...');
   this.waterTemperature = ko.observable('Loading ...');
   this.wikiError = ko.observable('');
   this.wikiText = ko.observable('Loading ...');
@@ -152,7 +151,6 @@ function owtViewModel() {
 
   this.togglePageInfo = function(){
     self.showPageInfo(!self.showPageInfo());
-    console.log(self.showPageInfo());
   }
 
   // Everything relating to search below this
@@ -286,7 +284,7 @@ function owtViewModel() {
       self.sampleDate(loc.waterInfo.dat);
       self.waterQuality(loc.waterInfo.wasserqualitaet);
       self.waterTemperature(loc.waterInfo.temp);
-      self.visibility(loc.waterInfo.sicht);
+      self.waterVisibility(loc.waterInfo.sicht);
     }
   }
 
