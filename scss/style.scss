@@ -3,7 +3,7 @@
 // Color variables
 $black: #000001;
 $white: #fffffe;
-$grey: #777;
+$grey: #ccc;
 $red: #a70000;
 
 
@@ -48,6 +48,10 @@ body {
 .small {
   font-size: 8px;
   font-weight: 100;
+}
+
+.medium {
+  font-size: 12px;
 }
 
 .text-center {
@@ -170,7 +174,8 @@ input {
   bottom: 0;
 }
 
-#info-title {
+#pi-title,
+.info-title {
   max-width: 80%;
   overflow: hidden;
   white-space: nowrap;
@@ -183,9 +188,10 @@ input {
 .close {
   float: right;
   padding: 5px 3px;
+  cursor: pointer;
 }
 
-#info-body {
+.info-body {
   clear: both;
   letter-spacing: 0.3em;
   padding: 0.333em;
@@ -200,4 +206,23 @@ footer {
   width: 100%;
   bottom: 0;
   padding: 0.33em;
+}
+
+.transparent {
+    background: rgba(0,0,0,0.5);
+}
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 120;
+}
+
+#page-info {
+  height: 80%;
+  width: 75%;
+  margin: 10% auto;
 }

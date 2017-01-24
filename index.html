@@ -7,8 +7,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta id="theme-color" name="theme-color" content="#000">
     <title>Oh, what's there?</title>
-    <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="css/zocial.css"> -->
     <link rel="stylesheet" href="css/grid.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -16,7 +14,6 @@
   </head>
   <body>
     <div class="fullscreen">
-
 
       <header class="text-center black">
         <p class="col-12 logo" data-bind="text: title">
@@ -50,19 +47,19 @@
           </div>
         </div>
 
-        <footer class="black small text-center">
+        <footer class="black medium text-center">
           <span data-bind="text: footerText"></span> |
-          <span data-bind="text: impressumLink, click: showPageInfo"
+          <span data-bind="text: impressumLink, click: togglePageInfo"
                 class="link">
           </span>
-          <p data-bind="text: credits, visible: false"></p>
         </footer>
 
+        <!-- Info window, displayed when location is selected -->
         <div id="info-window" class="black"
              data-bind="if: visibleInfo, visible: visibleInfo">
           <!-- <div class="info-window black"> -->
             <div class="info-header black">
-              <h2 id="info-title"
+              <h2 class="info-title"
                   class="link"
                   data-bind="text: infoTitle, click: bounceMarker">
               </h2>
@@ -70,7 +67,7 @@
                    data-bind="text: close, click: clearCurrentLocation">
               </div>
             </div>
-            <div id="info-body" class="black">
+            <div class="info-body" class="black">
               <h3>Water quality in this location</h3>
               <p data-bind="text: waterInfoError" class="error"></p>
               <p>
@@ -104,9 +101,34 @@
                 Read Wikipedia article
               </a>
             </div>
-          <!-- </div> -->
         </div>
+        <!-- end info window -->
 
+      </div>
+      <!-- End page bottom -->
+
+      <!-- Credits page whole page overlay -->
+      <div id="overlay" class="transparent" data-bind="visible: showPageInfo()">
+        <div id="page-info" class="black">
+          <div class="info-header black" data-bind="click: togglePageInfo">
+            <h3 id="pi-title"
+                class="link"
+                data-bind="text: piTitle, click: bounceMarker">
+            </h3>
+            <div class="close black fine"
+                 data-bind="text: piClose">
+            </div>
+          </div>
+          <div class="info-body">
+            <p data-bind="text: piResp"></p>
+            <p data-bind="text: piContact"></p>
+            <p data-bind="text: piEmail"></p>
+            <p><a data-bind="text: piGithub, attr: {href: piGithub}"></a></p>
+            <p><a data-bind="text: piWikiAPI, attr: {href: piWikiAPI}"></a></p>
+            <p><a data-bind="text: piCorsanywhere, attr: {href: piCorsanywhere}"></a></p>
+            <p><a data-bind="text: piBerlinAPI, attr: {href: piBerlinAPI}"></a></p>
+          </div>
+        </div>
       </div>
     </div>
 

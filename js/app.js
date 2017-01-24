@@ -86,6 +86,17 @@ function owtViewModel() {
     return self.wikiLink().length > 0;
   })
 
+  // Observables for page info
+  this.piTitle = ko.observable(textContent.pageInfo.title);
+  this.piClose = ko.observable(textContent.pageInfo.close);
+  this.piResp = ko.observable(textContent.pageInfo.responsibility);
+  this.piContact = ko.observable(textContent.pageInfo.contact);
+  this.piEmail = ko.observable(textContent.pageInfo.email);
+  this.piGithub = ko.observable(textContent.pageInfo.github);
+  this.piWikiAPI = ko.observable(textContent.pageInfo.wikiAPI);
+  this.piCorsanywhere = ko.observable(textContent.pageInfo.corsanywhere);
+  this.piBerlinAPI = ko.observable(textContent.pageInfo.berlinAPI);
+
   this.clearInfoWindow = function(){
     this.infoTitle('');
     this.waterInfoError('');
@@ -137,8 +148,11 @@ function owtViewModel() {
   }
 
   // Function to enlarge footer to show page info-title
-  this.showPageInfo = function(){
-    //
+  this.showPageInfo = ko.observable(false);
+
+  this.togglePageInfo = function(){
+    self.showPageInfo(!self.showPageInfo());
+    console.log(self.showPageInfo());
   }
 
   // Everything relating to search below this

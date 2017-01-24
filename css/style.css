@@ -19,7 +19,7 @@ body {
 body {
   width: 100%;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
-  background: #777 url("../img/background.jpg") no-repeat center;
+  background: #ccc url("../img/background.jpg") no-repeat center;
   padding: 0; }
 
 .black {
@@ -29,6 +29,9 @@ body {
 .small {
   font-size: 8px;
   font-weight: 100; }
+
+.medium {
+  font-size: 12px; }
 
 .text-center {
   text-align: center; }
@@ -58,7 +61,7 @@ a {
   line-height: 1.35em; }
 
 a {
-  color: #777; }
+  color: #ccc; }
 
 .fullscreen {
   position: absolute;
@@ -113,7 +116,7 @@ input {
   overflow: scroll; }
 
 .location {
-  border-top: 1px solid #777;
+  border-top: 1px solid #ccc;
   width: auto;
   padding: 2px; }
 
@@ -127,7 +130,8 @@ input {
   width: 100%;
   bottom: 0; }
 
-#info-title {
+#pi-title,
+.info-title {
   max-width: 80%;
   overflow: hidden;
   white-space: nowrap;
@@ -138,9 +142,10 @@ input {
 
 .close {
   float: right;
-  padding: 5px 3px; }
+  padding: 5px 3px;
+  cursor: pointer; }
 
-#info-body {
+.info-body {
   clear: both;
   letter-spacing: 0.3em;
   padding: 0.333em;
@@ -154,5 +159,21 @@ footer {
   width: 100%;
   bottom: 0;
   padding: 0.33em; }
+
+.transparent {
+  background: rgba(0, 0, 0, 0.5); }
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 120; }
+
+#page-info {
+  height: 80%;
+  width: 75%;
+  margin: 10% auto; }
 
 /*# sourceMappingURL=style.css.map */

@@ -26,10 +26,11 @@ Map of lakes in Berlin, making use of Berlin city's own api endpoints (due to la
 
 * Google Maps Javascript API (https://developers.google.com/maps/documentation/javascript/)
 * Wikipedia API (https://www.mediawiki.org/wiki/API:Main_page)
-* Tumblr API (https://www.tumblr.com/docs/en/api/v2)
+* ~~Tumblr API (https://www.tumblr.com/docs/en/api/v2)~~
 * Berlin Open Data API (https://daten.berlin.de/datensaetze/liste-der-badestellen)
 * http://cors-anywhere.herokuapp.com/ for retrieving non-CORS Berlin Open Data (Massive thanks!)
 
 ### TODO: ###
 
 * Responsive styling for larger screens
+* Get images from wikipedia (?)
