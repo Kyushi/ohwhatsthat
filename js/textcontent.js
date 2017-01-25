@@ -1,3 +1,4 @@
+// All English text for the website
 var textContent_en = {
   header: {
     title: "Oh, what's there?"

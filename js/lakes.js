@@ -1,3 +1,4 @@
+// All official swimming spots in lakes and rivers for Berlin
 lakes = [
     {
         "location": [

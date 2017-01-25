@@ -315,7 +315,6 @@ function owtViewModel() {
 
   // Retrieve information about water quality and temperature from Berlin API
   this.getWaterData = function(loc){
-    // var loc = self.getCurrentLocation();
     var query = self.makeSafeURI(loc.name);
     var url = 'https://cors-anywhere.herokuapp.com/www.berlin.de/lageso/gesundheit/gesundheitsschutz/badegewaesser/liste-der-badestellen/index.php/index.json';
     url = url + '?badname=' + query;

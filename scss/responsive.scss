@@ -1,4 +1,6 @@
-// CSS for responsiveness outside of the scope of bootstrap goes here
+// Responsive styles
+
+// Change layout to side-by-side view
 @media screen and (min-width: 640px) {
   #page-top {
     width: 50%;
@@ -14,6 +16,7 @@
   }
 }
 
+// Change ratio of elements and make header slimmer
 @media screen and (min-width: 900px) {
   #page-top {
     width: 65%;
@@ -35,6 +38,7 @@
   }
 }
 
+// Adapt ratio some more
 @media screen and (min-width: 1280px) {
   #page-top {
     width: 75%;
