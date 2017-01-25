@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Franziskus Nakajima">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta id="theme-color" name="theme-color" content="#000">
+    <meta id="theme-color" name="theme-color" content="#000001">
     <title>Oh, what's there?</title>
     <link rel="stylesheet" href="css/grid.css">
     <link rel="stylesheet" href="css/style.css">
@@ -77,43 +77,43 @@
                   <img id="place-img" data-bind="attr: {src: placePhotoURI}" />
                 </div>
                 <div>
-                  <p class="medium">Photo by
+                  <p class="medium">
                     <span data-bind="html: placePhotoCredits"></span>
                   </p>
                 </div>
               </div>
 
-              <h3>Water quality in this location</h3>
+              <h3 data-bind="text: waterInfoHeader"></h3>
               <p data-bind="text: waterInfoError" class="error"></p>
               <p>
-                <span>Last sampled: </span>
+                <span data-bind="text: sampleDateLabel"></span>
                 <span
                   data-bind="text: sampleDate">
                 </span>
               </p>
               <p>
-                <span>Quality: </span>
+                <span data-bind="text: waterQualityLabel"></span>
                 <span
                   data-bind="text: waterQuality">
                 </span>
               </p>
               <p>
-                <span>Temperature: </span>
+                <span data-bind="text: waterTempLabel"></span>
                 <span
                   data-bind="text: waterTemperature">
-                </span> ˚C
+                </span>
               </p>
               <p>
-                <span>Visibility: </span>
+                <span data-bind="text: waterVisLabel"></span>
                 <span
                   data-bind="text: waterVisibility">
-                </span> cm
+                </span>
               </p>
-              <h3>Short info from Wikipedia</h3>
+              <h3 data-bind="text: wikiHeader"></h3>
               <p data-bind="text: wikiError" class="error"></p>
               <p data-bind="html: wikiText"></p>
               <a data-bind="if: hasWikiLink, attr: {href: wikiLink}" target="_blank">
-                Read Wikipedia article
+                <span data-bind="text: wikiReadMore"></span>
               </a>
             </div>
         </div>
@@ -134,22 +134,44 @@
                  data-bind="text: close">
             </div>
           </div>
-          <div class="info-body">
+          <div id="info-body" class="medium">
             <p data-bind="text: piResp"></p>
+            <p data-bind="text: piAuthor"></p>
             <p data-bind="text: piContact"></p>
-            <p data-bind="text: piEmail"></p>
+            <a data-bind="attr: {href: 'mailto:'+piEmail()}">
+              <p data-bind="text: piEmail"></p>
+            </a>
             <p>
               <a data-bind="attr: {href: piGithub}">
-                <span class="brandico-github"> This page on github<span>
+                <span class="brandico-github" data-bind="text: piGithubText">
+                </span>
               </a>
+            </p>
+            <h3 data-bind="text: piApiCredits"></h3>
+            <p>
+              <a data-bind="attr: {href: piGoogleAPI}">
+                <span data-bind="text: piGoogleApiName"></span>
+              </a>
+              <p data-bind="text: piGoogleCredits"></p>
             </p>
             <p>
               <a data-bind="attr: {href: piWikiAPI}">
-                <span class="zocial-wikipedia"> Wikipedia's API </span>
+                <span class="zocial-wikipedia" data-bind="text: piWikiApiName">
+                </span>
               </a>
             </p>
-            <p><a data-bind="text: piCorsanywhere, attr: {href: piCorsanywhere}"></a></p>
-            <p><a data-bind="text: piBerlinAPI, attr: {href: piBerlinAPI}"></a></p>
+            <p>
+              <a data-bind="attr: {href: piCorsanywhere}">
+                <span data-bind="text: piCawName">
+                </span>
+              </a>
+            </p>
+            <p>
+              <a data-bind="attr: {href: piBerlinAPI}">
+                <span data-bind="text: piBerlinApiName">
+                </span>
+              </a>
+            </p>
           </div>
         </div>
       </div>

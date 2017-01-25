@@ -12,6 +12,9 @@ function owtViewModel() {
   // The old `self=this` trick
   var self = this;
 
+  // Load textcontent
+  var text = textContent_en;
+
   // Get all locations into an array
   this.locationList = model.data.map(function(location){
     return new Location(location);
@@ -67,12 +70,12 @@ function owtViewModel() {
   };
 
   // Load text from external source for easy localisation
-  this.close = ko.observable(textContent.helpers.close);
-  this.title = ko.observable(textContent.header.title);
-  this.searchLabel = ko.observable(textContent.search.inputLabel);
-  this.footerText = ko.observable(textContent.footer.footerText);
-  this.impressumLink = ko.observable(textContent.footer.impressum);
-  this.credits = ko.observable(textContent.footer.credits);
+  this.close = ko.observable(text.helpers.close);
+  this.title = ko.observable(text.header.title);
+  this.searchLabel = ko.observable(text.search.inputLabel);
+  this.footerText = ko.observable(text.footer.footerText);
+  this.impressumLink = ko.observable(text.footer.impressum);
+  this.credits = ko.observable(text.footer.credits);
 
   // Observables for info window
   this.infoTitle = ko.observable('');
@@ -80,13 +83,20 @@ function owtViewModel() {
   this.placePhotoError = ko.observable('');
   this.placePhotoURI = ko.observable('');
   this.placePhotoCredits = ko.observable('');
+  this.waterInfoHeader = ko.observable(text.infoWindow.waterInfoHeader);
   this.waterInfoError = ko.observable('');
+  this.sampleDateLabel = ko.observable(text.infoWindow.sampleDateLabel);
   this.sampleDate = ko.observable('Loading ...');
+  this.waterQualityLabel = ko.observable(text.infoWindow.waterQualityLabel)
   this.waterQuality = ko.observable('Loading ...');
+  this.waterVisLabel = ko.observable(text.infoWindow.visibilityLabel);
   this.waterVisibility = ko.observable('Loading ...');
+  this.waterTempLabel = ko.observable(text.infoWindow.temperatureLabel);
   this.waterTemperature = ko.observable('Loading ...');
+  this.wikiHeader = ko.observable(text.infoWindow.wikiHeader);
   this.wikiError = ko.observable('');
   this.wikiText = ko.observable('Loading ...');
+  this.wikiReadMore = ko.observable(text.infoWindow.wikiReadMore);
   this.wikiLink = ko.observable('Loading ...');
   this.hasWikiLink = ko.computed(function(){
     return self.wikiLink().length > 0;
@@ -112,15 +122,24 @@ function owtViewModel() {
   this.visibleInfo = ko.observable(false);
 
   // Observables for page info
-  this.piTitle = ko.observable(textContent.pageInfo.title);
-  this.piClose = ko.observable(textContent.pageInfo.close);
-  this.piResp = ko.observable(textContent.pageInfo.responsibility);
-  this.piContact = ko.observable(textContent.pageInfo.contact);
-  this.piEmail = ko.observable(textContent.pageInfo.email);
-  this.piGithub = ko.observable(textContent.pageInfo.github);
-  this.piWikiAPI = ko.observable(textContent.pageInfo.wikiAPI);
-  this.piCorsanywhere = ko.observable(textContent.pageInfo.corsanywhere);
-  this.piBerlinAPI = ko.observable(textContent.pageInfo.berlinAPI);
+  this.piTitle = ko.observable(text.pageInfo.title);
+  this.piClose = ko.observable(text.pageInfo.close);
+  this.piResp = ko.observable(text.pageInfo.responsibility);
+  this.piAuthor = ko.observable(text.pageInfo.author);
+  this.piContact = ko.observable(text.pageInfo.contact);
+  this.piEmail = ko.observable(text.pageInfo.email);
+  this.piApiCredits = ko.observable(text.pageInfo.APIcredits);
+  this.piGoogleApiName = ko.observable(text.pageInfo.googleApiName);
+  this.piGoogleAPI = ko.observable(text.pageInfo.googleAPI);
+  this.piGoogleCredits = ko.observable(text.pageInfo.googleCredits);
+  this.piGithub = ko.observable(text.pageInfo.github);
+  this.piGithubText = ko.observable(text.pageInfo.githubText);
+  this.piWikiApiName = ko.observable(text.pageInfo.wikiApiName);
+  this.piWikiAPI = ko.observable(text.pageInfo.wikiAPI);
+  this.piCawName = ko.observable(text.pageInfo.cawName);
+  this.piCorsanywhere = ko.observable(text.pageInfo.corsanywhere);
+  this.piBerlinApiName = ko.observable(text.pageInfo.berlinApiName);
+  this.piBerlinAPI = ko.observable(text.pageInfo.berlinAPI);
 
   // Show markers of search results
   this.showMarkers = function(results){
@@ -177,7 +196,7 @@ function owtViewModel() {
     var searchString = self.searchString().toLowerCase();
     var locations = self.locationList;
     var results = [];
-    for (i=0; i<self.locationList.length; i++) {
+    for (var i=0; i<self.locationList.length; i++) {
       if ((searchString.length > 0)
           && locations[i].name.toLowerCase().includes(searchString)) {
         results.push(locations[i]);
@@ -289,8 +308,8 @@ function owtViewModel() {
       self.waterInfoError('');
       self.sampleDate(loc.waterInfo.dat);
       self.waterQuality(loc.waterInfo.wasserqualitaet);
-      self.waterTemperature(loc.waterInfo.temp);
-      self.waterVisibility(loc.waterInfo.sicht);
+      self.waterTemperature(loc.waterInfo.temp + ' ˚C');
+      self.waterVisibility(loc.waterInfo.sicht + ' cm');
     }
   };
 
@@ -337,7 +356,8 @@ function owtViewModel() {
     if (loc.placePhoto.hasPhoto){
       self.hasPhoto(true);
       self.placePhotoURI(loc.placePhoto.photoUrl);
-      self.placePhotoCredits(loc.placePhoto.credits);
+      self.placePhotoCredits(text.infoWindow.photoCreditsLabel +
+                             loc.placePhoto.credits);
     }
   }
 
@@ -354,7 +374,7 @@ function owtViewModel() {
       if (status == "OK") {
         var photoLink;
         var html_attribution;
-        for (var i = results.length -1; i >=0; i--){
+        for (var i = results.length-1; i>=0; i--){
           if (results[i].photos !== undefined){
             photoLink = results[i].photos[0].getUrl({
               'maxWidth': 500,
@@ -374,15 +394,8 @@ function owtViewModel() {
       };
       self.loadPlacePhoto(loc);
     });
-  }
-
-  // TODO: Remove this Remove name add-ons like "(Fluss)" and "Berlin-" from wikipedia name
-  this.makeTumblrTag = function(name){
-    name = name.replace("Berlin-", "");
-    name = name.replace(/ *\([^)]*\) */g, "");
-    name = name.replace(/_/g, " ");
-    return name;
   };
+
 
 
   this.makeSafeURI = function(string){
@@ -392,10 +405,10 @@ function owtViewModel() {
     string = string.replace(/\)/, "%29");
     string = string.replace(/\//, "%2F");
     return string
-  }
+  };
 
 // End ViewModel
-};
+}
 
 
 // Location constructor
