@@ -20,12 +20,14 @@ function owtViewModel() {
   // Add click binding to location markers
   this.locationList.forEach(function(location){
     location.marker.addListener('click', function(){
+      self.clearInfoWindow();
       self.setCurrentLocation(location);
       self.infoTitle(location.name);
       self.bounceMarker(location);
       self.centerMap();
       self.getWikiInfo();
       self.getWaterInfo();
+      self.getPlacePhoto();
       self.visibleInfo(true);
     });
   });
@@ -46,6 +48,7 @@ function owtViewModel() {
 
   // React to click in search result list
   this.loadCurrentLocation = function(){
+    self.clearInfoWindow();
     self.setCurrentLocation(this);
     self.infoTitle(this.name);
     self.bounceMarker(this);
@@ -211,7 +214,6 @@ function owtViewModel() {
       self.wikiError(loc.wikiInfo.err);
     }
     else {
-      self.wikiError('');
       self.wikiText(loc.wikiInfo.wikiText);
       self.wikiLink(loc.wikiInfo.wikiLink);
     }

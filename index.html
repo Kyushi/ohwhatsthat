@@ -28,7 +28,7 @@
       <div id="page-bottom" class="black">
 
         <div id="search">
-          <div class="search-icon">
+          <div id="search-icon">
             <span class="entypo-search"></span>
           </div>
           <div class="input">
@@ -61,7 +61,7 @@
              data-bind="if: visibleInfo, visible: visibleInfo">
           <!-- <div class="info-window black"> -->
             <div class="info-header black">
-              <h2 class="info-title"
+              <h2 id="info-title"
                   class="link"
                   data-bind="text: infoTitle, click: bounceMarker">
               </h2>
@@ -69,7 +69,7 @@
                    data-bind="text: close, click: clearCurrentLocation">
               </div>
             </div>
-            <div class="info-body" class="black">
+            <div id="info-body" class="black">
               <!-- Photo of location if available -->
               <div id="place-photo" data-bind="if: hasPhoto">
                 <div class="error" date-bind="text: placePhotoError"></div>

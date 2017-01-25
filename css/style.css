@@ -26,29 +26,6 @@ body {
   background: #000001 url("../img/background.jpg") no-repeat center;
   padding: 0; }
 
-.black {
-  background: #000001;
-  color: #fffffe; }
-
-.small {
-  font-size: 8px;
-  font-weight: 100; }
-
-.medium {
-  font-size: 12px; }
-
-.text-center {
-  text-align: center; }
-
-.fine {
-  font-weight: 100; }
-
-.link {
-  cursor: pointer; }
-
-.error {
-  color: #a70000; }
-
 h2 {
   font-size: 18px;
   font-weight: 300; }
@@ -67,9 +44,30 @@ a {
 a {
   color: #ccc; }
 
+.black {
+  background: #000001;
+  color: #fffffe; }
+
+.small {
+  font-size: 8px; }
+
+.medium {
+  font-size: 12px; }
+
+.text-center {
+  text-align: center; }
+
+.fine {
+  font-weight: 100; }
+
+.link {
+  cursor: pointer; }
+
+.error {
+  color: #a70000; }
+
 .fullscreen {
   width: 100%;
-  margin: 0 auto;
   height: 100%;
   overflow: scroll; }
 
@@ -85,15 +83,6 @@ header {
   padding: 0.33em;
   text-align: center; }
 
-.open-menu {
-  text-align: center;
-  font-size: 14px;
-  font-weight: 400; }
-
-.tumblr-img,
-.img {
-  max-width: 100%; }
-
 #map {
   width: 100%;
   height: 85%; }
@@ -106,7 +95,7 @@ header {
 #search {
   height: 15%; }
 
-.search-icon {
+#search-icon {
   font-size: 18px;
   padding: 14px;
   float: left; }
@@ -141,8 +130,13 @@ input {
   width: 100%;
   bottom: 0; }
 
+.close {
+  float: right;
+  padding: 5px 3px;
+  cursor: pointer; }
+
 #pi-title,
-.info-title {
+#info-title {
   max-width: 80%;
   overflow: hidden;
   white-space: nowrap;
@@ -151,12 +145,7 @@ input {
   float: left;
   height: 10%; }
 
-.close {
-  float: right;
-  padding: 5px 3px;
-  cursor: pointer; }
-
-.info-body {
+#info-body {
   clear: both;
   letter-spacing: 0.3em;
   padding: 0.333em;

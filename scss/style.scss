@@ -25,7 +25,7 @@ $red: #a70000;
   font-family: 'zocial', sans-serif;
 }
 
-// reset
+// reset & initialise
 * {
   margin: 0;
   padding: 0;
@@ -42,37 +42,6 @@ body {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   background: $black url('../img/background.jpg') no-repeat center;
   padding: 0;
-}
-
-// general styles
-.black {
-  background: $black;
-  color: $white;
-}
-
-.small {
-  font-size: 8px;
-  font-weight: 100;
-}
-
-.medium {
-  font-size: 12px;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.fine {
-  font-weight: 100;
-}
-
-.link {
-  cursor: pointer;
-}
-
-.error {
-  color: $red;
 }
 
 h2 {
@@ -97,10 +66,41 @@ a {
   color: $grey;
 }
 
+// general styles
+.black {
+  background: $black;
+  color: $white;
+}
+
+.small {
+  font-size: 8px;
+}
+
+.medium {
+  font-size: 12px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.fine {
+  font-weight: 100;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.error {
+  color: $red;
+}
+
+
+// Page elements
+
 .fullscreen {
-  // position: absolute;
   width: 100%;
-  margin: 0 auto;
   height: 100%;
   overflow: scroll;
 }
@@ -120,16 +120,16 @@ header {
   text-align: center;
 }
 
-.open-menu {
-  text-align: center;
-  font-size: 14px;
-  font-weight: 400;
-}
+// .open-menu {
+//   text-align: center;
+//   font-size: 14px;
+//   font-weight: 400;
+// }
 
-.tumblr-img,
-.img {
-  max-width: 100%;
-}
+// .tumblr-img,
+// .img {
+//   max-width: 100%;
+// }
 
 #map {
   width: 100%;
@@ -147,7 +147,7 @@ header {
   height: 15%;
 }
 
-.search-icon {
+#search-icon {
   font-size: 18px;
   padding: 14px;
   float: left;
@@ -181,6 +181,8 @@ input {
   width: 100%;
 }
 
+// Info window styling
+
 #info-window {
   position: absolute;
   opacity: 1;
@@ -189,8 +191,14 @@ input {
   bottom: 0;
 }
 
+.close {
+  float: right;
+  padding: 5px 3px;
+  cursor: pointer;
+}
+
 #pi-title,
-.info-title {
+#info-title {
   max-width: 80%;
   overflow: hidden;
   white-space: nowrap;
@@ -200,13 +208,7 @@ input {
   height: 10%;
 }
 
-.close {
-  float: right;
-  padding: 5px 3px;
-  cursor: pointer;
-}
-
-.info-body {
+#info-body {
   clear: both;
   letter-spacing: 0.3em;
   padding: 0.333em;
