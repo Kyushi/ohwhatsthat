@@ -100,7 +100,7 @@ lakes = [
             "13.600676",
             "52.41259"
         ],
-        "name": "Gr\u00fcnau",
+        "name": "Gr\u00fcnau, Freibad",
         "wpName": "Berlin-Grünau"
     },
     {
