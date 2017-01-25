@@ -1,13 +1,13 @@
 // Set global map variable
 var map;
 
-// Model
+// *** Model ***
 var model = {
   currentLocation: ko.observable(null),
   data: lakes
 };
 
-// Viewmodel
+// *** Viewmodel ***
 function owtViewModel() {
   // The old `self=this` trick
   var self = this;
@@ -52,6 +52,7 @@ function owtViewModel() {
     self.centerMap();
     self.getWikiInfo();
     self.getWaterInfo();
+    self.getPlacePhoto();
     self.visibleInfo(true);
   };
 
@@ -72,6 +73,10 @@ function owtViewModel() {
 
   // Observables for info window
   this.infoTitle = ko.observable('');
+  this.hasPhoto = ko.observable(false);
+  this.placePhotoError = ko.observable('');
+  this.placePhotoURI = ko.observable('');
+  this.placePhotoCredits = ko.observable('');
   this.waterInfoError = ko.observable('');
   this.sampleDate = ko.observable('Loading ...');
   this.waterQuality = ko.observable('Loading ...');
@@ -84,6 +89,25 @@ function owtViewModel() {
     return self.wikiLink().length > 0;
   });
 
+  this.clearInfoWindow = function(){
+    self.infoTitle('');
+    self.hasPhoto(false);
+    self.placePhotoError('');
+    self.placePhotoURI('');
+    self.placePhotoCredits('');
+    self.waterInfoError('');
+    self.sampleDate('Loading ...');
+    self.waterQuality('Loading ...');
+    self.waterVisibility('Loading ...');
+    self.waterTemperature('Loading ...');
+    self.wikiError('');
+    self.wikiText('Loading ...');
+    self.wikiLink('Loading ...');
+  };
+
+  // Observable for info window visibility
+  this.visibleInfo = ko.observable(false);
+
   // Observables for page info
   this.piTitle = ko.observable(textContent.pageInfo.title);
   this.piClose = ko.observable(textContent.pageInfo.close);
@@ -94,26 +118,6 @@ function owtViewModel() {
   this.piWikiAPI = ko.observable(textContent.pageInfo.wikiAPI);
   this.piCorsanywhere = ko.observable(textContent.pageInfo.corsanywhere);
   this.piBerlinAPI = ko.observable(textContent.pageInfo.berlinAPI);
-
-  this.clearInfoWindow = function(){
-    this.infoTitle('');
-    this.waterInfoError('');
-    this.sampleDate('Loading ...');
-    this.waterQuality('Loading ...');
-    this.waterVisibility('Loading ...');
-    this.waterTemperature('Loading ...');
-    this.wikiError('');
-    this.wikiText('Loading ...');
-    this.wikiLink('Loading ...');
-  };
-
-  // Obserrvable for info window
-  this.visibleInfo = ko.observable(false);
-
-  // Function to toggle visibility of info window
-  // this.toggleVisible = function(){
-  //   self.visibleInfo(!self.visibleInfo());
-  // };
 
   // Show markers of search results
   this.showMarkers = function(results){
@@ -141,7 +145,7 @@ function owtViewModel() {
   };
 
   this.resetMapCenter = function(){
-    map.setCenter({lat: 52.515, lng: 13.415});
+    map.setCenter({lat: 52.520, lng: 13.409});
     map.setZoom(10);
   };
 
@@ -312,7 +316,65 @@ function owtViewModel() {
     });
   };
 
-  // Remove name add-ons like "(Fluss)" and "Berlin-" from wikipedia name
+  // Get place photo, load from location if previously retrieved, else get from
+  // Google Places
+  this.getPlacePhoto = function(){
+    var loc = self.getCurrentLocation();
+    if (loc.placePhoto === undefined) {
+      self.getPlacePhotoData(loc);
+    }
+    else {
+      self.loadPlacePhoto(loc);
+    }
+  }
+
+  // Load photo data from location
+  this.loadPlacePhoto = function(loc){
+    // `hasPhoto` is false by default, so we only need to change things if there
+    // is a photo link stored
+    if (loc.placePhoto.hasPhoto){
+      self.hasPhoto(true);
+      self.placePhotoURI(loc.placePhoto.photoUrl);
+      self.placePhotoCredits(loc.placePhoto.credits);
+    }
+  }
+
+  // Get place photo using the Google Places API library
+  this.getPlacePhotoData = function(loc){
+    loc.placePhoto = {};
+    var request = {
+      location: loc.coords,
+      radius: '600',
+      type: "natural_feature"
+    }
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, function(results, status){
+      if (status == "OK") {
+        var photoLink;
+        var html_attribution;
+        for (var i = results.length -1; i >=0; i--){
+          if (results[i].photos !== undefined){
+            photoLink = results[i].photos[0].getUrl({
+              'maxWidth': 500,
+              'maxHeight': 500
+            });
+            html_attribution = results[i].photos[0].html_attributions[0];
+          }
+        }
+        if (photoLink !== undefined) {
+          loc.placePhoto.hasPhoto = true;
+          loc.placePhoto.photoUrl = photoLink;
+          loc.placePhoto.credits = html_attribution;
+        }
+        else {
+          loc.placePhoto.hasPhoto = false;
+        }
+      };
+      self.loadPlacePhoto(loc);
+    });
+  }
+
+  // TODO: Remove this Remove name add-ons like "(Fluss)" and "Berlin-" from wikipedia name
   this.makeTumblrTag = function(name){
     name = name.replace("Berlin-", "");
     name = name.replace(/ *\([^)]*\) */g, "");
@@ -329,6 +391,8 @@ function owtViewModel() {
     string = string.replace(/\//, "%2F");
     return string
   }
+
+// End ViewModel
 };
 
 
@@ -346,7 +410,7 @@ var Location = function(data) {
 };
 
 
-// Initialise map, centered on Berlin, with markers
+// *** Initialise map, centered on Berlin, with markers ***
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 52.515, lng: 13.415},

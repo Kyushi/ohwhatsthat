@@ -70,6 +70,19 @@
               </div>
             </div>
             <div class="info-body" class="black">
+              <!-- Photo of location if available -->
+              <div id="place-photo" data-bind="if: hasPhoto">
+                <div class="error" date-bind="text: placePhotoError"></div>
+                <div id="photocontainer">
+                  <img id="place-img" data-bind="attr: {src: placePhotoURI}" />
+                </div>
+                <div>
+                  <p class="medium">Photo by
+                    <span data-bind="html: placePhotoCredits"></span>
+                  </p>
+                </div>
+              </div>
+
               <h3>Water quality in this location</h3>
               <p data-bind="text: waterInfoError" class="error"></p>
               <p>
@@ -150,7 +163,7 @@
     <script src="js/knockout-3.4.1.js"></script>
     <!-- Load google maps api -->
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdTMyR9dXpej2PMKSs8RplX7cAfLvj_Ns&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdTMyR9dXpej2PMKSs8RplX7cAfLvj_Ns&libraries=places&callback=initMap">
     </script>
     <!-- Load text content -->
     <script src="js/textcontent.js"></script>
