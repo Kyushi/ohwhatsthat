@@ -1,7 +1,7 @@
 # Oh, what's there? #
 
 A knockout.js map project. Proof of concept demo.
-View live version here: http://ohwhatsthere.franziskusnakajima.net/ 
+View live version here: http://ohwhatsthere.franziskusnakajima.net/
 
 ___
 
@@ -27,6 +27,5 @@ Map of lakes in Berlin, making use of Berlin city's own api endpoints (due to la
 * Google Maps Javascript API (https://developers.google.com/maps/documentation/javascript/)
 * Google Places Library to load photos for locations
 * Wikipedia API (https://www.mediawiki.org/wiki/API:Main_page)
-* ~~Tumblr API (https://www.tumblr.com/docs/en/api/v2)~~
 * Berlin Open Data API (https://daten.berlin.de/datensaetze/liste-der-badestellen)
 * http://cors-anywhere.herokuapp.com/ for retrieving non-CORS Berlin Open Data (Massive thanks!)
