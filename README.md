@@ -16,7 +16,7 @@ Map of lakes in Berlin, making use of Berlin city's own api endpoints (due to la
 ### Quickstart ###
 
 * clone this repository: `git clone https://github.com/Kyushi/ohwhatsthere.git`
-* Open folder
+* open folder
 * open file `index.html` in you preferred browser (Internet connection required)
 
 ### Technologies used ###
