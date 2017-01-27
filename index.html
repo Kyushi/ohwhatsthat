@@ -183,15 +183,16 @@
     </script>
     <!-- Load Knockout -->
     <script src="js/knockout-3.4.1.js"></script>
-    <!-- Load google maps api -->
-    <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdTMyR9dXpej2PMKSs8RplX7cAfLvj_Ns&libraries=places&callback=initMap">
-    </script>
     <!-- Load text content -->
     <script src="js/textcontent.js"></script>
     <!-- Load my JSON location data as js object -->
     <script src="js/lakes.js"></script>
     <!-- Load my app -->
     <script src="js/app.js"></script>
+    <!-- Load google maps api -->
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdTMyR9dXpej2PMKSs8RplX7cAfLvj_Ns&libraries=places&callback=initMap"
+      onerror="mapError()">
+    </script>
   </body>
 </html>

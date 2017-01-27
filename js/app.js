@@ -1,6 +1,12 @@
 // Set global map variable
 var map;
 
+// Error mesage if google maps does not loading
+function mapError(){
+  alert("We're sorry, but the Google Maps API could not be loaded. " +
+  "Please try reloading the page.");
+}
+
 // *** Model ***
 var model = {
   currentLocation: ko.observable(null),
@@ -180,11 +186,6 @@ function owtViewModel() {
 
   // Everything relating to search below this
 
-  // show or hide search bar
-  this.toggleSearch = function(){
-    $(".popout").toggle();
-  };
-
   // searchString for testing
   this.searchString = ko.observable('');
 
@@ -241,12 +242,10 @@ function owtViewModel() {
   // Retrieve Wikipedia info
   this.getWikiData = function(loc){
     // set TimeOut
-    var wikiRequestTimeout = setTimeout(function(){
-      loc.wikiInfo.wikiText = "Looks like the data was delivered by a" +
-                                   " sloth. The request timed out."
-    }, 8000);
     var pageTitle = loc.wpName;
     var wpurl = "https://de.wikipedia.org/w/api.php";
+    var genError = "Hm, we weren't able to get any info from " +
+      "Wikipedia at this time.";
     wpurl = wpurl + '?' + $.param({
       'format': "json",
       'action': "query",
@@ -259,8 +258,13 @@ function owtViewModel() {
       dataType: 'jsonp'
     })
     .done(function(data){
-      clearTimeout(wikiRequestTimeout);
       loc.wikiInfo = {};
+      if (data.query === undefined){
+        loc.wikiInfo.err = genError;
+      }
+      else if (data.query.pages === undefined){
+        loc.wikiInfo.err = genError;
+      }
       if (-1 in data.query.pages) {
         loc.wikiInfo.err = "Oops, looks like there is nothing written" +
                                 " about this on Wikipedia"
@@ -272,14 +276,16 @@ function owtViewModel() {
         $.each(result, function(i){
           extract = result[i]["extract"];
         });
+        if (extract.length == 0){
+          loc.wikiInfo.err = genError;
+        }
         loc.wikiInfo.wikiText = extract;
         loc.wikiInfo.wikiLink = article_url;
       }
     })
     .fail(function(){
       loc.wikiInfo = {};
-      loc.wikiInfo.err = "Something went wrong when trying to" +
-                                   "retrieve info from Wikipedia."
+      loc.wikiInfo.err = genError;
     })
     .always(function(){
       self.loadWikiInfo(loc);
@@ -439,4 +445,4 @@ function initMap() {
   var markers = owt.locationList.map(function(location){
     return location.marker;
   });
-};
+}
